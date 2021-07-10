@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "94093628533",
+    "project_id": "nullife-feeddo",
+    "storage_bucket": "nullife-feeddo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94093628533:android:b2573060e53271a48c143c",
+        "android_client_info": {
+          "package_name": "com.example.nullife_feeddo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94093628533-npgt4tv8r13g602uvtfqgqn8so5hqehj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkoyKzUHTAXd2sClM3dfr_XNwkxgAidF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94093628533-npgt4tv8r13g602uvtfqgqn8so5hqehj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
