@@ -1,3 +1,5 @@
+import 'package:google_fonts/google_fonts.dart';
+import 'package:nullife_feeddo/models/pet_model.dart';
 import 'package:nullife_feeddo/models/user_profile.dart';
 import 'package:nullife_feeddo/providers/email_signin_provider.dart';
 import 'package:nullife_feeddo/providers/google_signin_provider.dart';
@@ -73,7 +75,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               top: MediaQuery.of(context).size.height / 12,
                               right: MediaQuery.of(context).size.width / 6,
                               child: Column(
-                                children: [buildProfileImage(user!)],
+                                children: [
+                                  buildProfileImage(user!),
+                                  Text(
+                                    Pet.generatePetList()[user.petID].petName,
+                                    style: GoogleFonts.boogaloo(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             Positioned(
@@ -146,21 +156,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  Widget buildPetName(UserProfile user) => Column(
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Foxxy', //displaying username
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-                color: Color.fromRGBO(236, 177, 134, 1),
-              ),
-            ),
-          ),
-        ],
-      );
   Widget buildUserName(UserProfile user) => Container(
         width: 200,
         height: 50,

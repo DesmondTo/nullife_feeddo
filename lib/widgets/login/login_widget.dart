@@ -43,6 +43,8 @@ class LogInWidget extends StatelessWidget {
                           children: [
                             Text('Something went wrong, please try again'),
                             Text('The error is: ' + snapshot2.error.toString()),
+                            Text('The current user is: ' +
+                                user.email.toString()),
                           ],
                         );
                       } else {

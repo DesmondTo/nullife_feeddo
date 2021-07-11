@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:nullife_feeddo/models/user_profile.dart';
 import 'package:nullife_feeddo/providers/userProfile_provider.dart';
 import 'package:nullife_feeddo/screens/account_screen/change_password_screen.dart';
+import 'package:nullife_feeddo/screens/select_pet_screen/select_pet_screen.dart';
 import 'package:nullife_feeddo/uploadImage_firebase_api.dart';
 import 'package:nullife_feeddo/widgets/user_profile_widget_folder/email_textForm_widget.dart';
 import 'package:nullife_feeddo/widgets/user_profile_widget_folder/password_textForm_widget.dart';
@@ -130,6 +131,26 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
                               passwordController: passwordController,
                               hintText: 'Current password',
                             ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Color.fromRGBO(236, 177, 134, 1),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0))),
+                            ),
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SelectPetScreen(
+                                          user: widget.userProfile,
+                                        ))),
+                            child: Text(
+                              'Change Pet',
+                              style: GoogleFonts.boogaloo(
+                                  fontSize: MediaQuery.of(context).size.width *
+                                      0.075),
+                            ),
+                          ),
                           if (isChanging ||
                               widget.userProfile.email.toLowerCase() ==
                                   emailController.text.toLowerCase())
@@ -272,6 +293,7 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
         userName: userNameController.text,
         userPhotoURL:
             userPhotoURL == '' ? originalProfile.userPhotoURL : userPhotoURL!,
+        categoryFieldList: originalProfile.categoryFieldList,
       );
       if (!isChanging) {
         try {
