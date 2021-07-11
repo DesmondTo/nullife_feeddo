@@ -3,6 +3,7 @@ import 'package:nullife_feeddo/models/user_profile.dart';
 import 'package:nullife_feeddo/providers/userProfile_provider.dart';
 import 'package:nullife_feeddo/widgets/category_widget/category_name_textForm.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class EditCategoryDialog extends StatefulWidget {
   final UserProfile userProfile;
@@ -18,9 +19,10 @@ class EditCategoryDialog extends StatefulWidget {
 }
 
 class _EditCategoryDialogState extends State<EditCategoryDialog> {
+  final _formKey = GlobalKey<FormState>();
   final categoryNameController = TextEditingController();
-  final colorController = TextEditingController();
   late String categoryString;
+  late Color color;
 
   @override
   void initState() {
@@ -29,14 +31,13 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
     categoryString = user.categoryFieldList[widget.index];
     categoryNameController.text =
         categoryString.substring(0, categoryString.indexOf(":")).trim();
-    colorController.text =
-        categoryString.substring(categoryString.indexOf(":") + 1).trim();
+    color = Color(int.parse(
+        categoryString.substring(categoryString.indexOf(":") + 1).trim()));
   }
 
   @override
   void dispose() {
     categoryNameController.dispose();
-    colorController.dispose();
 
     super.dispose();
   }
@@ -49,9 +50,29 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
     );
     return AlertDialog(
       backgroundColor: Color(0xFFF5F5DC),
-      content: Container(
-        child: CategoryNameTextFormWidget(
-          categoryNameController: categoryNameController,
+      title: Text('Change category name and pick a color'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Form(
+              key: _formKey,
+              child: CategoryNameTextFormWidget(
+                categoryNameController: categoryNameController,
+              ),
+            ),
+            ColorPicker(
+              colorPickerWidth: 300,
+              onColorChanged: (Color color) {
+                setState(() {
+                  this.color = color;
+                });
+              },
+              pickerColor: this.color,
+              enableAlpha: false,
+              showLabel: false,
+            ),
+          ],
         ),
       ),
       actions: [
@@ -62,20 +83,24 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
             child: Text('Cancel')),
         TextButton(
             onPressed: () {
-              List<String> newCategoryFieldList =
-                  widget.userProfile.categoryFieldList;
-              newCategoryFieldList[widget.index] = categoryNameController.text +
-                  categoryString.substring(categoryString.indexOf(":")).trim();
-              final newUser = UserProfile(
-                  firestoreID: widget.userProfile.firestoreID,
-                  userID: widget.userProfile.userID,
-                  petID: widget.userProfile.petID,
-                  email: widget.userProfile.email.toLowerCase(),
-                  userName: widget.userProfile.userName,
-                  userPhotoURL: widget.userProfile.userPhotoURL,
-                  categoryFieldList: widget.userProfile.categoryFieldList);
-              userProfileProvider.editUser(newUser, widget.userProfile);
-              Navigator.pop(context);
+              print('The color is: ' + this.color.toString());
+              final isValid = _formKey.currentState!.validate();
+              if (isValid) {
+                widget.userProfile.categoryFieldList[widget.index] =
+                    categoryNameController.text +
+                        ":" +
+                        this.color.toString().substring(6, 16);
+                final newUser = UserProfile(
+                    firestoreID: widget.userProfile.firestoreID,
+                    userID: widget.userProfile.userID,
+                    petID: widget.userProfile.petID,
+                    email: widget.userProfile.email.toLowerCase(),
+                    userName: widget.userProfile.userName,
+                    userPhotoURL: widget.userProfile.userPhotoURL,
+                    categoryFieldList: widget.userProfile.categoryFieldList);
+                userProfileProvider.editUser(newUser, widget.userProfile);
+                Navigator.pop(context);
+              }
             },
             child: Text('Save'))
       ],

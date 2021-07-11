@@ -33,7 +33,10 @@ class CategoryButton extends StatelessWidget {
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => TodoListWidget(category: this.category))),
+              builder: (context) => TodoListWidget(
+                    category: this.category,
+                    bgColor: buttonColor,
+                  ))),
       child: Container(
         padding: const EdgeInsets.only(top: 0),
         margin: const EdgeInsets.only(bottom: 6.0),
