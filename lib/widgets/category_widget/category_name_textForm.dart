@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CategoryNameTextFormWidget extends StatelessWidget {
   final TextEditingController categoryNameController;
-  static final validCharacters = RegExp(r'^[a-zA-Z0-9&%=]+$');
+  static final validCharacters = RegExp(r'^[a-zA-Z0-9 ]*$');
 
   CategoryNameTextFormWidget({
     Key? key,
@@ -34,12 +34,19 @@ class CategoryNameTextFormWidget extends StatelessWidget {
         onFieldSubmitted: (_) {},
         validator: (categoryName) => categoryName != null &&
                 categoryName.isEmpty
-            ? 'Category name cannot be empty'
+            ? 'Cannot be empty'
             : categoryName != null && !validCharacters.hasMatch(categoryName)
-                ? 'Category name can only contains A-Z, a-z, 0-9'
-                : null,
+                ? 'Only alphanumeric\nand space allowed'
+                : categoryName != null && allSpace(categoryName)
+                    ? 'Cannot contains\nonly whitespace(s)'
+                    : null,
         controller: categoryNameController,
       ),
     );
+  }
+
+  bool allSpace(String title) {
+    return title.runes
+        .fold(true, (previousValue, element) => previousValue && element == 32);
   }
 }

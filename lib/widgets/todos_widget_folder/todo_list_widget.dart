@@ -2,7 +2,6 @@ import 'package:nullife_feeddo/models/todo_data_source.dart';
 import 'package:nullife_feeddo/providers/todo_provider.dart';
 import 'package:nullife_feeddo/screens/todo_screen_folder/edit_todo_screen.dart';
 import 'package:nullife_feeddo/screens/todo_screen_folder/view_todo_screen.dart';
-import 'package:nullife_feeddo/utils.dart';
 import 'package:nullife_feeddo/widgets/todos_widget_folder/completed_list_widget.dart';
 import 'package:nullife_feeddo/widgets/todos_widget_folder/todo_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +10,13 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class TodoListWidget extends StatelessWidget {
+  final Color bgColor;
   final String category;
 
-  TodoListWidget({required this.category});
+  TodoListWidget({
+    required this.bgColor,
+    required this.category,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,7 @@ class TodoListWidget extends StatelessWidget {
                       Material(
                         elevation: 5,
                         child: Container(
-                          color: Utils.toCategoryColor(category: category),
+                          color: bgColor,
                           height: MediaQuery.of(context).size.height * 0.3,
                         ),
                       ),
