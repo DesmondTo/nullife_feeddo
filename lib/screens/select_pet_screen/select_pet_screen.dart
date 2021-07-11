@@ -7,6 +7,7 @@ import 'package:nullife_feeddo/providers/userProfile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nullife_feeddo/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class SelectPetScreen extends StatefulWidget {
@@ -86,6 +87,12 @@ class _PageViewWidgetState extends State<PageViewWidget> {
 
   final String defaultPhotoURL =
       'https://mspgh.unimelb.edu.au/__data/assets/image/0011/3576098/Placeholder.jpg';
+  final List<String> defaultList = [
+    'study:0xFFFF8B9C',
+    'Self Care:0xFFB5C2A1',
+    'Sports:0xFFF8B593',
+    'Family Time:0xFFDEC183',
+  ];
   final currentUser = FirebaseAuth.instance.currentUser!;
 
   @override
@@ -125,26 +132,27 @@ class _PageViewWidgetState extends State<PageViewWidget> {
           onTap: () {
             if (widget.user == null) {
               final newUser = UserProfile(
-                userID: currentUser.uid,
-                petID: index,
-                email: (currentUser.email ?? emailSignInProvider.userEmail)
-                    .toLowerCase(),
-                userName:
-                    currentUser.displayName ?? emailSignInProvider.userName,
-                userPhotoURL: currentUser.photoURL ?? defaultPhotoURL,
-              );
+                  userID: currentUser.uid,
+                  petID: index,
+                  email: (currentUser.email ?? emailSignInProvider.userEmail)
+                      .toLowerCase(),
+                  userName:
+                      currentUser.displayName ?? emailSignInProvider.userName,
+                  userPhotoURL: currentUser.photoURL ?? defaultPhotoURL,
+                  categoryFieldList: defaultList);
               userProfileProvider.addUser(newUser);
             } else {
               final newUser = UserProfile(
-                firestoreID: widget.user!.firestoreID,
-                userID: widget.user!.userID,
-                petID: index,
-                email: widget.user!.email.toLowerCase(),
-                userName: widget.user!.userName,
-                userPhotoURL: widget.user!.userPhotoURL,
-              );
+                  firestoreID: widget.user!.firestoreID,
+                  userID: widget.user!.userID,
+                  petID: index,
+                  email: widget.user!.email.toLowerCase(),
+                  userName: widget.user!.userName,
+                  userPhotoURL: widget.user!.userPhotoURL,
+                  categoryFieldList: defaultList);
               userProfileProvider.editUser(newUser, widget.user!);
-              Navigator.pop(context);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()));
             }
           },
           child: Container(

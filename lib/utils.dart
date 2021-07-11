@@ -152,4 +152,12 @@ class Utils {
                 ? Duration(hours: 1)
                 : Duration(days: 1);
   }
+
+  static List<String> toListOfString(List<dynamic> jsonList) {
+    List<String> res = [];
+    for (dynamic ele in jsonList) {
+      res.add(ele);
+    }
+    return res;
+  }
 }
