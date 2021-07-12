@@ -124,6 +124,7 @@ class TodoWidget extends StatelessWidget {
   void editTodo(BuildContext context, Todo todo) => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => TodoEditingScreen(
+            bgColor: todo.backgroundColor,
             todo: todo,
             category: todo.category,
           ),

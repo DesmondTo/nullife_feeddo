@@ -16,11 +16,13 @@ import '../../main.dart';
 
 class TodoEditingScreen extends StatefulWidget {
   final Todo? todo;
+  final Color bgColor;
   final String category;
 
   const TodoEditingScreen({
     Key? key,
     this.todo,
+    required this.bgColor,
     required this.category,
   }) : super(key: key);
 
@@ -89,9 +91,6 @@ class _TodoEditingScreenState extends State<TodoEditingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    tz.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation('Asia/Singapore'));
-
     return Scaffold(
       appBar: AppBar(
         leading: CloseButton(),
@@ -228,12 +227,12 @@ class _TodoEditingScreenState extends State<TodoEditingScreen> {
       }
       dropdownValue =
           fromDate.subtract(Duration(minutes: 10)).isBefore(DateTime.now())
-              ? '0 minutes'
+              ? '<10 minutes'
               : '10 minutes';
       dropdownList = fromDate
               .subtract(Duration(minutes: 10))
               .isBefore(DateTime.now())
-          ? <String>['0 minutes']
+          ? <String>['<10 minutes']
           : fromDate.subtract(Duration(hours: 1)).isBefore(DateTime.now())
               ? <String>['10 minutes']
               : fromDate.subtract(Duration(days: 1)).isBefore(DateTime.now())
@@ -313,7 +312,7 @@ class _TodoEditingScreenState extends State<TodoEditingScreen> {
         userId: widget.todo?.userId ?? FirebaseAuth.instance.currentUser!.uid,
         createdTime: widget.todo?.createdTime ?? DateTime.now(),
         category: category,
-        backgroundColor: Utils.toCategoryColor(category: category),
+        backgroundColor: widget.bgColor,
         id: widget.todo?.id ?? DateTime.now().toString(),
         title: titleController.text,
         description: descriptionController.text,
@@ -346,8 +345,9 @@ class _TodoEditingScreenState extends State<TodoEditingScreen> {
 
     // Find the 'current location'
     final location = await timeZone.getLocation(timeZoneName);
+    tz.initializeTimeZones();
     tz.setLocalLocation(location);
-    final scheduleDateTime = dropdownValue == '0 minutes'
+    final scheduleDateTime = dropdownValue == '<10 minutes'
         ? tz.TZDateTime.from(fromDate, tz.local).add(Duration(seconds: 5))
         : tz.TZDateTime.from(fromDate, tz.local)
             .subtract(Utils.toDuration(dropdownValue));
