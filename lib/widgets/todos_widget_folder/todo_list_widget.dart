@@ -155,7 +155,8 @@ class TodoListWidget extends StatelessWidget {
             backgroundColor: Colors.black,
             onPressed: () => showDialog(
               context: context,
-              builder: (context) => TodoEditingScreen(category: this.category),
+              builder: (context) =>
+                  TodoEditingScreen(bgColor: bgColor, category: this.category),
               barrierDismissible: false,
             ),
             child: Icon(Icons.add),

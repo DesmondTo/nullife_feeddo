@@ -44,7 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
               if (snapshot.hasError) {
                 print('The error is: ' + snapshot.error.toString());
                 return buildText(
-                    'Something went wrong, please try again later');
+                    'Something went wrong, please try again later' +
+                        '\n${snapshot.error.toString()}');
               } else {
                 final List<Todo>? todos = snapshot.data;
 
@@ -100,6 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
 Widget buildText(String text) => Center(
       child: Text(
         text,
-        style: TextStyle(fontSize: 24, color: Colors.white),
+        style: TextStyle(fontSize: 24, color: Colors.black),
       ),
     );

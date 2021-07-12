@@ -88,7 +88,7 @@ class _PageViewWidgetState extends State<PageViewWidget> {
   final String defaultPhotoURL =
       'https://mspgh.unimelb.edu.au/__data/assets/image/0011/3576098/Placeholder.jpg';
   final List<String> defaultList = [
-    'study:0xFFFF8B9C',
+    'Study:0xFFFF8B9C',
     'Self Care:0xFFB5C2A1',
     'Sports:0xFFF8B593',
     'Family Time:0xFFDEC183',

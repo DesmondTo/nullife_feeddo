@@ -96,8 +96,10 @@ class TodoViewingScreen extends StatelessWidget {
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  TodoEditingScreen(todo: todo, category: todo.category),
+              builder: (context) => TodoEditingScreen(
+                  bgColor: todo.backgroundColor,
+                  todo: todo,
+                  category: todo.category),
             ),
           ),
         ),

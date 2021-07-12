@@ -64,6 +64,7 @@ class Utils {
   }
 
   static String fromColor(Color colorValue) {
+    // print('The color full string is: ' + colorValue.toString());
     return colorValue.toString().substring(6, 16);
   }
 
@@ -100,18 +101,6 @@ class Utils {
       'NOV',
     ];
     return monthStrings[monthValue - 1];
-  }
-
-  static Color toCategoryColor({required String category}) {
-    return category == 'Study'
-        ? studyColor
-        : category == 'Self Care'
-            ? selfCareColor
-            : category == 'Sports'
-                ? sportColor
-                : category == 'Family Time'
-                    ? familyTimeColor
-                    : Colors.lightBlue;
   }
 
   static Color toProgressColor({required String category}) {
