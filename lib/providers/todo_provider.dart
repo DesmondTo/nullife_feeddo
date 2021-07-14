@@ -53,6 +53,16 @@ class TodoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeTodoByCategory(String category) {
+    for (Todo todo in _todos) {
+      if (todo.category == category) {
+        TodoFirebaseApi.deleteTodo(todo);
+      }
+    }
+    _todos.removeWhere((todo) => todo.category == category);
+    notifyListeners();
+  }
+
   bool toggleTodoStatus(Todo todo) {
     todo.isDone = !todo.isDone;
     TodoFirebaseApi.updateTodo(todo);

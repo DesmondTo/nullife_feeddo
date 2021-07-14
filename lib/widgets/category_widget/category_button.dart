@@ -1,6 +1,9 @@
+import 'package:nullife_feeddo/models/menu_item.dart';
 import 'package:nullife_feeddo/models/user_profile.dart';
 import 'package:nullife_feeddo/providers/todo_provider.dart';
+import 'package:nullife_feeddo/widgets/category_widget/delete_category_widget.dart';
 import 'package:nullife_feeddo/widgets/category_widget/edit_category_widget.dart';
+import 'package:nullife_feeddo/widgets/category_widget/menu_items.dart';
 import 'package:nullife_feeddo/widgets/todos_widget_folder/todo_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,32 +47,30 @@ class CategoryButton extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => EditCategoryDialog(
-                            userProfile: userProfile,
-                            index: index,
-                          ));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
                       '$category',
                       style: GoogleFonts.boogaloo(
                         fontSize: MediaQuery.of(context).size.height * 0.03,
                         color: Colors.white,
                       ),
-                      textAlign: TextAlign.start,
                     ),
-                    Icon(
+                  ),
+                  PopupMenuButton<MenuItem>(
+                    icon: Icon(
                       Icons.more_horiz,
                       color: Colors.white,
                     ),
-                  ],
-                ),
+                    onSelected: (MenuItem item) => onSelected(context, item),
+                    itemBuilder: (BuildContext context) => [
+                      ...MenuItems.categoryMenu.map(buildItem).toList(),
+                    ],
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -108,5 +109,43 @@ class CategoryButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  PopupMenuItem<MenuItem> buildItem(MenuItem item) => PopupMenuItem<MenuItem>(
+        value: item,
+        child: Row(
+          children: [
+            Icon(
+              item.icon,
+              color: Colors.black,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Text(item.text),
+          ],
+        ),
+      );
+
+  void onSelected(BuildContext context, MenuItem item) {
+    switch (item) {
+      case MenuItems.itemEdit:
+        showDialog(
+            context: context,
+            builder: (context) => EditCategoryDialog(
+                  userProfile: userProfile,
+                  index: index,
+                ));
+        break;
+      case MenuItems.itemDelete:
+        showDialog(
+          context: context,
+          builder: (context) => DeleteCategoryDialog(
+            category: category,
+            index: index,
+            userProfile: userProfile,
+          ),
+        );
+        break;
+    }
   }
 }
