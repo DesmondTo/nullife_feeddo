@@ -7,7 +7,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class EditCategoryDialog extends StatefulWidget {
   final UserProfile userProfile;
-  final int index;
+  final int? index;
   const EditCategoryDialog({
     Key? key,
     required this.userProfile,
@@ -28,17 +28,22 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
   void initState() {
     super.initState();
     final UserProfile user = widget.userProfile;
-    categoryString = user.categoryFieldList[widget.index];
-    categoryNameController.text =
-        categoryString.substring(0, categoryString.indexOf(":")).trim();
-    color = Color(int.parse(
-        categoryString.substring(categoryString.indexOf(":") + 1).trim()));
+    if (widget.index == null) {
+      categoryString = '';
+      categoryNameController.text = '';
+      color = Color(0xFFFF0000);
+    } else {
+      categoryString = user.categoryFieldList[widget.index!];
+      categoryNameController.text =
+          categoryString.substring(0, categoryString.indexOf(":")).trim();
+      color = Color(int.parse(
+          categoryString.substring(categoryString.indexOf(":") + 1).trim()));
+    }
   }
 
   @override
   void dispose() {
     categoryNameController.dispose();
-
     super.dispose();
   }
 
@@ -60,6 +65,9 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
               child: CategoryNameTextFormWidget(
                 categoryNameController: categoryNameController,
               ),
+            ),
+            const SizedBox(
+              height: 10,
             ),
             ColorPicker(
               colorPickerWidth: 300,
@@ -83,13 +91,19 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
             child: Text('Cancel')),
         TextButton(
             onPressed: () {
-              print('The color is: ' + this.color.toString());
               final isValid = _formKey.currentState!.validate();
               if (isValid) {
-                widget.userProfile.categoryFieldList[widget.index] =
-                    categoryNameController.text +
-                        ":" +
-                        this.color.toString().substring(6, 16);
+                if (widget.index == null) {
+                  widget.userProfile.categoryFieldList.add(
+                      categoryNameController.text +
+                          ":" +
+                          this.color.toString().substring(6, 16));
+                } else {
+                  widget.userProfile.categoryFieldList[widget.index!] =
+                      categoryNameController.text +
+                          ":" +
+                          this.color.toString().substring(6, 16);
+                }
                 final newUser = UserProfile(
                     firestoreID: widget.userProfile.firestoreID,
                     userID: widget.userProfile.userID,
@@ -102,7 +116,7 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                 Navigator.pop(context);
               }
             },
-            child: Text('Save'))
+            child: Text(widget.index == null ? 'Add' : 'Save'))
       ],
     );
   }
