@@ -35,6 +35,14 @@ class _SelectPetScreenState extends State<SelectPetScreen> {
       },
       child: SafeArea(
         child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: CloseButton(
+              color: Colors.black,
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
           backgroundColor: Colors.white,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -155,54 +163,75 @@ class _PageViewWidgetState extends State<PageViewWidget> {
                   MaterialPageRoute(builder: (context) => HomeScreen()));
             }
           },
-          child: Container(
-            padding: EdgeInsets.only(
-              right: 10,
-              left: 20,
-              top: 100 - scale * 25,
-              bottom: 50,
-            ),
-            child: Transform(
-              transform: Matrix4.identity()
-                ..setEntry(
-                  3,
-                  2,
-                  0.001,
-                )
-                ..rotateY(angle),
-              alignment: Alignment.center,
-              child: Material(
-                color: Colors.blue.shade200,
-                elevation: 4,
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      _petList[index].petImagesName[0],
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                    ),
-                    Positioned(
-                      bottom: 60,
-                      left: 20,
-                      child: AnimatedOpacity(
-                        opacity: angle == 0 ? 1 : 0,
-                        duration: Duration(
-                          milliseconds: 200,
-                        ),
-                        child: Text(
-                          _petList[index].petName,
-                          style: GoogleFonts.boogaloo(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                          ),
+          child: Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  right: 10,
+                  left: 20,
+                  top: 100 - scale * 30,
+                  bottom: 100,
+                ),
+                child: Transform(
+                  transform: Matrix4.identity()
+                    ..setEntry(
+                      3,
+                      2,
+                      0.001,
+                    )
+                    ..rotateY(angle),
+                  alignment: Alignment.center,
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(223, 234, 226, 1),
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(
+                                width: 5.0, color: const Color(0xFFFFFFFF))),
+                      ),
+                      Positioned(
+                        top: MediaQuery.of(context).size.height / 10,
+                        left: 20,
+                        child: Image.asset(
+                          _petList[index].petImagesName[0],
+                          width: MediaQuery.of(context).size.width / 1.6,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
+              Positioned(
+                bottom: 100 - scale * 20,
+                left: MediaQuery.of(context).size.width / 10,
+                child: Container(
+                  height: 50,
+                  width: 230,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(107, 175, 146, 1),
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      width: 5.0,
+                      color: const Color(0xFFFFFFFF),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 100 - scale * 15,
+                left: MediaQuery.of(context).size.width / 3,
+                child: Text(
+                  _petList[index].petName,
+                  style: GoogleFonts.boogaloo(
+                    color: Colors.white,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
