@@ -39,11 +39,10 @@ class _SelectPetScreenState extends State<SelectPetScreen> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             leading: CloseButton(
-              color: Colors.black,
               onPressed: () => Navigator.pop(context),
             ),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Color.fromRGBO(180, 214, 193, 1),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -53,12 +52,12 @@ class _SelectPetScreenState extends State<SelectPetScreen> {
                   left: 0,
                 ),
                 child: Text(
-                  "Find your \nfavourite pet.",
+                  "SELECT A PET",
                   style: GoogleFonts.boogaloo(
                     letterSpacing: 1.3,
-                    color: Colors.black,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 25,
+                    fontSize: 28,
                     height: 1.3,
                   ),
                 ),
