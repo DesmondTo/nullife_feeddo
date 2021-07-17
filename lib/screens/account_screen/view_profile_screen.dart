@@ -64,7 +64,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   child: Container(
                                     margin: EdgeInsets.all(0),
                                     child: Image.asset(
-                                      'assets/images/account_lowerbackground.png',
+                                      'assets/images/account_screen_lowerbackground.png',
                                       fit: BoxFit.cover,
                                     ),
                                   ),

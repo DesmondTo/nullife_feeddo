@@ -24,7 +24,7 @@ class Pet {
             id: 0,
             petName: 'Woody',
             petImagesName: <String>[
-              "assets/images/sample_woody_display.png",
+              "assets/images/select_pet_screen_woody_display.png",
             ],
             behaviour: Behaviour.Balance)
         : id == 1
@@ -32,14 +32,14 @@ class Pet {
                 id: 1,
                 petName: 'Splashy',
                 petImagesName: <String>[
-                  "assets/images/sample_splashy_display.png",
+                  "assets/images/select_pet_screen_splashy_display.png",
                 ],
                 behaviour: Behaviour.Balance)
             : Pet(
                 id: 2,
                 petName: 'Sol',
                 petImagesName: <String>[
-                  "assets/images/sample_sol_display.png",
+                  "assets/images/select_pet_screen_sol_display.png",
                 ],
                 behaviour: Behaviour.Balance);
   }
@@ -50,21 +50,21 @@ class Pet {
           id: 0,
           petName: 'Woody',
           petImagesName: <String>[
-            "assets/images/sample_woody_display.png",
+            "assets/images/select_pet_screen_woody_display.png",
           ],
           behaviour: Behaviour.Balance),
       Pet(
           id: 1,
           petName: 'Splashy',
           petImagesName: <String>[
-            "assets/images/sample_splashy_display.png",
+            "assets/images/select_pet_screen_splashy_display.png",
           ],
           behaviour: Behaviour.Balance),
       Pet(
           id: 2,
           petName: 'Sol',
           petImagesName: <String>[
-            "assets/images/sample_sol_display.png",
+            "assets/images/select_pet_screen_sol_display.png",
           ],
           behaviour: Behaviour.Balance),
     ];

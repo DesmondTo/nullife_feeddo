@@ -118,14 +118,14 @@ class Utils {
   static SvgPicture toCategorySVG({required String category, required width}) {
     return SvgPicture.asset(
       category == 'Study'
-          ? 'assets/images/book.svg'
+          ? 'assets/images/calendar_widget_book.svg'
           : category == 'Self Care'
-              ? 'assets/images/selfcare.svg'
+              ? 'assets/images/calendar_widget_selfcare.svg'
               : category == 'Sports'
-                  ? 'assets/images/sport.svg'
+                  ? 'assets/images/calendar_widget_sport.svg'
                   : category == 'Family Time'
-                      ? 'assets/images/family.svg'
-                      : 'assets/images/pet.svg',
+                      ? 'assets/images/calendar_widget_family.svg'
+                      : 'assets/images/calendar_widget_pet.svg',
       fit: BoxFit.contain,
       width: width,
       height: 60,

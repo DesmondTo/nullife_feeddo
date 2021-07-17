@@ -87,13 +87,13 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [
           TabItem(
             icon: SvgPicture.asset(
-              'assets/images/dashboard.svg',
+              'assets/icons/dashboard.svg',
             ),
             title: 'Dashboard',
           ),
           TabItem(
             icon: SvgPicture.asset(
-              'assets/images/category.svg',
+              'assets/icons/category.svg',
             ),
             title: 'Category',
           ),
@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           TabItem(
             icon: SvgPicture.asset(
-              'assets/images/user.svg',
+              'assets/icons/user.svg',
             ),
             title: 'Account',
           ),

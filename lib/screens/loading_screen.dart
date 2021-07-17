@@ -21,7 +21,7 @@ class LoadingScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/images/wiener_dog.gif',
+                  'assets/images/loading_screen_wiener_dog.gif',
                   width: screenSize.width * 0.9,
                   height: screenSize.height * 0.5,
                   fit: BoxFit.fill,
