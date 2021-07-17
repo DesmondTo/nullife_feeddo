@@ -43,7 +43,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                 bottom: 0,
                 right: 0,
                 child: Image.asset(
-                  "assets/images/pet.gif",
+                  "assets/images/dashboard_pet.gif",
                   fit: BoxFit.contain,
                 ),
               ),
@@ -51,7 +51,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                 bottom: MediaQuery.of(context).size.height * 0.25,
                 left: 0,
                 child: SvgPicture.asset(
-                  'assets/images/speechbubble.svg',
+                  'assets/images/dashboard_speechbubble.svg',
                   fit: BoxFit.fitWidth,
                 ),
               ),

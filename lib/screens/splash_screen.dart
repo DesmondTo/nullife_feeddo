@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
               flex: 3,
             ),
             Image.asset(
-              'assets/images/sleeping_shiba_inu.png',
+              'assets/images/splash_screen.png',
             ),
             RichText(
               text: TextSpan(children: [

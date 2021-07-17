@@ -28,12 +28,12 @@ class CalendarWidget extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             child: Image.asset(
               currentHour >= 6 && currentHour < 12
-                  ? 'assets/images/morning_bg.jpg'
+                  ? 'assets/images/schedule_screen_morning_bg.jpg'
                   : currentHour >= 12 && currentHour < 17
-                      ? 'assets/images/afternoon_bg.jpg'
+                      ? 'assets/images/schedule_screen_afternoon_bg.jpg'
                       : currentHour >= 17 && currentHour < 19
-                          ? 'assets/images/evening_bg.jpg'
-                          : 'assets/images/night_bg.jpg',
+                          ? 'assets/images/schedule_screen_evening_bg.jpg'
+                          : 'assets/images/schedule_screen_night_bg.jpg',
               fit: BoxFit.fitWidth,
             ),
             height: MediaQuery.of(context).size.height * 0.15,

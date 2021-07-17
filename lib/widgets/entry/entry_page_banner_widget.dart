@@ -15,7 +15,7 @@ class EntryPageBanner extends StatelessWidget {
             child: Column(
               children: [
                 Image.asset(
-                  'assets/images/arrow_banner.png',
+                  'assets/images/entry_screen_top.png',
                   width: size.width * 0.9,
                   fit: BoxFit.fill,
                 ),

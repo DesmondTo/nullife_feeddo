@@ -27,7 +27,7 @@ class EntryBackground extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 0, bottom: 0),
             child: Image.asset(
-              "assets/images/shiba_inu_fat_cheek.png",
+              "assets/images/entry_screen_bottom.png",
               width: size.width,
               height: size.height * 0.4,
               fit: BoxFit.fill,

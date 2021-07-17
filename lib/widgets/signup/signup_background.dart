@@ -19,7 +19,7 @@ class SignUpBackground extends StatelessWidget {
         alignment: Alignment.center,
         children: <Widget>[
           SvgPicture.asset(
-            "assets/images/phone_frame.svg",
+            "assets/images/login_register_background.svg",
             width: size.width * 0.9,
             height: size.height * 0.8,
           ),

@@ -106,10 +106,10 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image.asset(
-                  'assets/images/verify_dog.png',
+                  'assets/images/verify_screen_dog.png',
                 ),
                 Image.asset(
-                  'assets/images/verify_footprint.png',
+                  'assets/images/verify_screen_footprint.png',
                 )
               ],
             ),

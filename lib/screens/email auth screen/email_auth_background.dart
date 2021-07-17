@@ -26,7 +26,7 @@ class EmailAuthBackground extends StatelessWidget {
                   top: size.height * 0.1,
                   left: size.width * 0.05,
                   child: Image.asset(
-                    "assets/images/deco_dot_top_left.png",
+                    "assets/images/email_auth_deco_dot_top_left.png",
                     width: size.width * 0.1,
                     height: size.height * 0.1,
                     fit: BoxFit.fitWidth,
@@ -36,7 +36,7 @@ class EmailAuthBackground extends StatelessWidget {
                   bottom: -size.height * 0.115,
                   right: size.height * 0.05,
                   child: Image.asset(
-                    "assets/images/deco_barDot_bot_right.png",
+                    "assets/images/email_auth_deco_barDot_bot_right.png",
                     width: size.width * 0.5,
                     height: size.height * 0.35,
                     fit: BoxFit.fitWidth,
@@ -56,7 +56,7 @@ class EmailAuthBackground extends StatelessWidget {
                   top: 0,
                   left: 0,
                   child: Image.asset(
-                    "assets/images/footprints_top_left.png",
+                    "assets/images/email_auth_footprints_top_left.png",
                     width: size.width * 0.5,
                     height: size.height * 0.35,
                     fit: BoxFit.fitWidth,
@@ -66,7 +66,7 @@ class EmailAuthBackground extends StatelessWidget {
                   bottom: -size.height * 0.115,
                   right: 0,
                   child: Image.asset(
-                    "assets/images/footprints_bot_right.png",
+                    "assets/images/email_auth_footprints_bot_right.png",
                     width: size.width * 0.5,
                     height: size.height * 0.35,
                     fit: BoxFit.fitWidth,
