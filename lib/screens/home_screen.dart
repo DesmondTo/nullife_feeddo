@@ -26,8 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // Store the current user in this variable.
     final tabs = [
-      DashboardWidget(),
       CategoryScreen(),
+      DashboardWidget(),
       ScheduleWidget(),
       UserProfileScreen(),
     ];
@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final user = provider.getCurrentUser();
 
     return Scaffold(
-      floatingActionButton: selectedIndex == 1
+      floatingActionButton: selectedIndex == 0
           ? FloatingActionButton(
               backgroundColor: Colors.black,
               onPressed: () {
@@ -87,15 +87,15 @@ class _HomeScreenState extends State<HomeScreen> {
         items: [
           TabItem(
             icon: SvgPicture.asset(
-              'assets/icons/dashboard.svg',
-            ),
-            title: 'Dashboard',
-          ),
-          TabItem(
-            icon: SvgPicture.asset(
               'assets/icons/category.svg',
             ),
             title: 'Category',
+          ),
+          TabItem(
+            icon: SvgPicture.asset(
+              'assets/icons/dashboard.svg',
+            ),
+            title: 'Dashboard',
           ),
           TabItem(
             icon: Image.asset(

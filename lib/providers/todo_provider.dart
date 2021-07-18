@@ -1,4 +1,5 @@
 import 'package:nullife_feeddo/models/todo_model.dart';
+import 'package:nullife_feeddo/models/todo_weekly_data.dart';
 import 'package:nullife_feeddo/todo_firebase_api.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -25,6 +26,46 @@ class TodoProvider extends ChangeNotifier {
         todosByCategory(category: category, isCompleted: false).length +
             completedNum;
     return completedNum == 0 ? 0 : completedNum * 100 / totalByCategory;
+  }
+
+  List<TodoWeeklyData> computeChartData() {
+    List<String> categoryList =
+        _todos.fold(<String>[], (List<String> prevList, Todo todo) {
+      if (!prevList.contains(todo.category)) {
+        prevList.add(todo.category);
+      }
+      return prevList;
+    });
+    return categoryList.fold(<TodoWeeklyData>[],
+        (List<TodoWeeklyData> prevList, String category) {
+      double currPercent = computeBalance(category);
+      if (currPercent != 0)
+        prevList.add(TodoWeeklyData(category, computeBalance(category)));
+      return prevList;
+    });
+  }
+
+  double computeBalance(String category) {
+    int completedNum = _todos.fold(
+        0,
+        (int prevNum, Todo todo) =>
+            prevNum + (completedWithinWeekByCategory(category, todo) ? 1 : 0));
+    int totalCompleted = todosCompleted.length;
+
+    return completedNum == 0 ? 0 : completedNum * 100 / totalCompleted;
+  }
+
+  bool completedWithinWeekByCategory(String category, Todo todo) {
+    if (category != todo.category || !todo.isDone) return false;
+
+    int currentWeekDay = DateTime.now().weekday;
+    int startDay = DateTime.now().day - currentWeekDay + 1;
+    int endDay = DateTime.now().day - 7 + currentWeekDay;
+    DateTime todoDateTime = todo.from;
+
+    return todoDateTime.year == DateTime.now().year &&
+        todoDateTime.month == DateTime.now().month &&
+        (todoDateTime.day >= startDay && todoDateTime.day <= endDay);
   }
 
   void setTodos(List<Todo> todos) =>

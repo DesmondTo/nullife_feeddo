@@ -12,9 +12,10 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String userUID = currentUser!.uid;
     return SafeArea(
       child: StreamBuilder<List<UserProfile>>(
-          stream: UserFirebaseApi.readUsersByUID(currentUser!.uid),
+          stream: UserFirebaseApi.readUsersByUID(userUID),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
