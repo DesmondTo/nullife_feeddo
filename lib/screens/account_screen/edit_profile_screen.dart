@@ -74,7 +74,7 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
         body: SingleChildScrollView(
           child: Container(
             alignment: Alignment.center,
-            height: MediaQuery.of(context).size.height * 0.9,
+            height: MediaQuery.of(context).size.height,
             child: Flex(
               direction: Axis.vertical,
               children: [

@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CategoryNameTextFormWidget extends StatelessWidget {
-  final TextEditingController categoryNameController;
+  final TextEditingController controller;
   static final validCharacters = RegExp(r'^[a-zA-Z0-9 ]*$');
 
   CategoryNameTextFormWidget({
     Key? key,
-    required this.categoryNameController,
+    required this.controller,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -32,15 +31,17 @@ class CategoryNameTextFormWidget extends StatelessWidget {
           ),
         ),
         onFieldSubmitted: (_) {},
-        validator: (categoryName) => categoryName != null &&
-                categoryName.isEmpty
-            ? 'Cannot be empty'
-            : categoryName != null && !validCharacters.hasMatch(categoryName)
-                ? 'Only alphanumeric\nand space allowed'
-                : categoryName != null && allSpace(categoryName)
-                    ? 'Cannot contains\nonly whitespace(s)'
-                    : null,
-        controller: categoryNameController,
+        validator: (categoryName) =>
+            categoryName != null && categoryName.isEmpty
+                ? 'Cannot be empty'
+                : categoryName != null &&
+                        !CategoryNameTextFormWidget.validCharacters
+                            .hasMatch(categoryName)
+                    ? 'Only alphanumeric\nand space allowed'
+                    : categoryName != null && allSpace(categoryName)
+                        ? 'Cannot contains\nonly whitespace(s)'
+                        : null,
+        controller: controller,
       ),
     );
   }

@@ -12,61 +12,14 @@ class TodoProvider extends ChangeNotifier {
   List<Todo> get todosCompleted =>
       _todos.where((todo) => todo.isDone == true).toList();
 
-  List<Todo> todosByCategory(
-          {required String category, required bool isCompleted}) =>
+  List<Todo> todosByCategory({
+    required String category,
+    required bool isCompleted,
+  }) =>
       _todos
           .where(
               (todo) => todo.isDone == isCompleted && todo.category == category)
           .toList();
-
-  double completedPercentageByCategory(String category) {
-    int completedNum =
-        todosByCategory(category: category, isCompleted: true).length;
-    int totalByCategory =
-        todosByCategory(category: category, isCompleted: false).length +
-            completedNum;
-    return completedNum == 0 ? 0 : completedNum * 100 / totalByCategory;
-  }
-
-  List<TodoWeeklyData> computeChartData() {
-    List<String> categoryList =
-        _todos.fold(<String>[], (List<String> prevList, Todo todo) {
-      if (!prevList.contains(todo.category)) {
-        prevList.add(todo.category);
-      }
-      return prevList;
-    });
-    return categoryList.fold(<TodoWeeklyData>[],
-        (List<TodoWeeklyData> prevList, String category) {
-      double currPercent = computeBalance(category);
-      if (currPercent != 0)
-        prevList.add(TodoWeeklyData(category, computeBalance(category)));
-      return prevList;
-    });
-  }
-
-  double computeBalance(String category) {
-    int completedNum = _todos.fold(
-        0,
-        (int prevNum, Todo todo) =>
-            prevNum + (completedWithinWeekByCategory(category, todo) ? 1 : 0));
-    int totalCompleted = todosCompleted.length;
-
-    return completedNum == 0 ? 0 : completedNum * 100 / totalCompleted;
-  }
-
-  bool completedWithinWeekByCategory(String category, Todo todo) {
-    if (category != todo.category || !todo.isDone) return false;
-
-    int currentWeekDay = DateTime.now().weekday;
-    int startDay = DateTime.now().day - currentWeekDay + 1;
-    int endDay = DateTime.now().day - 7 + currentWeekDay;
-    DateTime todoDateTime = todo.from;
-
-    return todoDateTime.year == DateTime.now().year &&
-        todoDateTime.month == DateTime.now().month &&
-        (todoDateTime.day >= startDay && todoDateTime.day <= endDay);
-  }
 
   void setTodos(List<Todo> todos) =>
       WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -116,5 +69,47 @@ class TodoProvider extends ChangeNotifier {
     TodoFirebaseApi.updateTodo(newTodo);
 
     notifyListeners();
+  }
+
+  // The following methods are used to compute the doughnut chart in dashboard page
+  double completedPercentageByCategory(String category) {
+    int completedNum =
+        todosByCategory(category: category, isCompleted: true).length;
+    int totalByCategory =
+        todosByCategory(category: category, isCompleted: false).length +
+            completedNum;
+    return completedNum == 0 ? 0 : completedNum * 100 / totalByCategory;
+  }
+
+  List<TodoWeeklyData> computeChartData(List<String> categoryList) {
+    return categoryList.fold(<TodoWeeklyData>[],
+        (List<TodoWeeklyData> prevList, String category) {
+      prevList.add(TodoWeeklyData(category, computeDuration(category)));
+      return prevList;
+    });
+  }
+
+  int computeDuration(String category) {
+    int completedDuration = _todos.fold(
+        0,
+        (int prevDuration, Todo todo) =>
+            prevDuration +
+            (completedWithinWeekByCategory(category, todo)
+                ? todo.to.difference(todo.from).inMinutes
+                : 0));
+    return completedDuration;
+  }
+
+  bool completedWithinWeekByCategory(String category, Todo todo) {
+    if (category != todo.category || !todo.isDone) return false;
+
+    int currentWeekDay = DateTime.now().weekday;
+    int startDay = DateTime.now().day - currentWeekDay + 1;
+    int endDay = DateTime.now().day + 7 - currentWeekDay;
+    DateTime todoDateTime = todo.from;
+
+    return todoDateTime.year == DateTime.now().year &&
+        todoDateTime.month == DateTime.now().month &&
+        (todoDateTime.day >= startDay && todoDateTime.day <= endDay);
   }
 }

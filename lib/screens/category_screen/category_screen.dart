@@ -7,7 +7,12 @@ import 'package:nullife_feeddo/widgets/category_widget/category_header.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CategoryScreen extends StatelessWidget {
+class CategoryScreen extends StatefulWidget {
+  @override
+  _CategoryScreenState createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
   final User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override

@@ -1,5 +1,3 @@
-import 'package:google_fonts/google_fonts.dart';
-import 'package:nullife_feeddo/models/pet_model.dart';
 import 'package:nullife_feeddo/models/user_profile.dart';
 import 'package:nullife_feeddo/providers/email_signin_provider.dart';
 import 'package:nullife_feeddo/providers/google_signin_provider.dart';
@@ -44,92 +42,59 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
                   return SafeArea(
                     child: Scaffold(
-                      body: Container(
-                        height: MediaQuery.of(context).size.height,
-                        child: Stack(
-                          children: [
-                            Flex(
-                              direction: Axis.vertical,
-                              children: [
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.height / 4,
-                                  color: Color.fromRGBO(251, 237, 215, 1),
-                                ),
-                                const Divider(
-                                  thickness: 8,
-                                  color: Color.fromRGBO(236, 177, 134, 1),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    margin: EdgeInsets.all(0),
-                                    child: Image.asset(
-                                      'assets/images/account_screen_lowerbackground.png',
-                                      fit: BoxFit.cover,
+                      body: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Flex(
+                            direction: Axis.vertical,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        width: 8.0,
+                                        color: Color.fromRGBO(236, 177, 134, 1),
+                                      ),
                                     ),
+                                    color: Color.fromRGBO(251, 237, 215, 1),
                                   ),
                                 ),
-                              ],
-                            ),
-                            Positioned(
-                              top: MediaQuery.of(context).size.height / 12,
-                              right: MediaQuery.of(context).size.width / 6,
-                              child: Column(
-                                children: [
-                                  buildProfileImage(user!),
-                                  Text(
-                                    Pet.generatePetList()[user.petID].petName,
-                                    style: GoogleFonts.boogaloo(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
                               ),
-                            ),
-                            Positioned(
-                              bottom: MediaQuery.of(context).size.height / 2.7,
-                              right: MediaQuery.of(context).size.width / 1.45,
-                              child: Text(
-                                'Username',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Color.fromRGBO(236, 177, 134, 1),
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  child: Image.asset(
+                                    'assets/images/account_screen_lowerbackground.png',
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Positioned(
-                              right: MediaQuery.of(context).size.width / 10,
-                              bottom: MediaQuery.of(context).size.height / 2.85,
-                              child: buildUserName(user),
-                            ),
-                            Positioned(
-                              bottom: MediaQuery.of(context).size.height / 4,
-                              right: MediaQuery.of(context).size.width / 1.3,
-                              child: Text('Email',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Color.fromRGBO(236, 177, 134, 1),
-                                  )),
-                            ),
-                            Positioned(
-                              right: MediaQuery.of(context).size.width / 10,
-                              bottom: MediaQuery.of(context).size.height / 4.3,
-                              child: buildEmail(user),
-                            ),
-                            Positioned(
-                              right: MediaQuery.of(context).size.width / 2.7,
-                              bottom: MediaQuery.of(context).size.height / 8,
-                              child: buildEditButton(user),
-                            ),
-                            Positioned(
-                              right: MediaQuery.of(context).size.width / 2.7,
-                              bottom: MediaQuery.of(context).size.height / 20,
-                              child: buildLogOutButton(),
-                            )
-                          ],
-                        ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: buildProfileImage(user!),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  children: [
+                                    buildUserName(user),
+                                    buildEmail(user),
+                                    buildEditButton(user),
+                                    buildLogOutButton(),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -141,9 +106,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Widget buildProfileImage(UserProfile user) {
     return Container(
-      margin: EdgeInsets.all(20),
-      width: 200,
-      height: 200,
+      margin: EdgeInsets.all(0.0),
+      width: MediaQuery.of(context).size.width / 1.35,
       decoration: new BoxDecoration(
         shape: BoxShape.circle,
         color: Color(0xff000000),
@@ -157,48 +121,84 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget buildUserName(UserProfile user) => Container(
-        width: 200,
+        width: double.infinity,
         height: 50,
-        child: Container(
-          decoration: BoxDecoration(
-              color: Color.fromRGBO(236, 177, 134, 1),
-              borderRadius: BorderRadius.all(Radius.circular(10.0))),
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Padding(
-              padding: EdgeInsets.all(5),
+        margin: EdgeInsets.all(8),
+        child: Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
               child: Text(
-                user.userName,
+                'Username',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: Colors.white),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color.fromRGBO(236, 177, 134, 1),
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
-          ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(236, 177, 134, 1),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Text(
+                    user.userName,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       );
 
   Widget buildEmail(UserProfile user) => Container(
-        width: 200,
-        height: 50,
-        child: Container(
-          decoration: BoxDecoration(
-              color: Color.fromRGBO(236, 177, 134, 1),
-              borderRadius: BorderRadius.all(Radius.circular(10.0))),
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Padding(
-              padding: EdgeInsets.all(5),
+        width: double.infinity,
+        margin: EdgeInsets.all(8),
+        child: Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
               child: Text(
-                user.email,
+                'Email',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: Colors.white),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color.fromRGBO(236, 177, 134, 1),
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
-          ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(236, 177, 134, 1),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: SingleChildScrollView(
+                    child: Text(
+                      user.email,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       );
 

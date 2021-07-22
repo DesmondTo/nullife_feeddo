@@ -21,7 +21,7 @@ class EditCategoryDialog extends StatefulWidget {
 class _EditCategoryDialogState extends State<EditCategoryDialog> {
   final _formKey = GlobalKey<FormState>();
   final categoryNameController = TextEditingController();
-  late String categoryString;
+  late String? categoryString;
   late Color color;
 
   @override
@@ -29,15 +29,15 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
     super.initState();
     final UserProfile user = widget.userProfile;
     if (widget.index == null) {
-      categoryString = '';
+      categoryString = null;
       categoryNameController.text = '';
       color = Color(0xFFFF0000);
     } else {
       categoryString = user.categoryFieldList[widget.index!];
       categoryNameController.text =
-          categoryString.substring(0, categoryString.indexOf(":")).trim();
+          categoryString!.substring(0, categoryString!.indexOf(":")).trim();
       color = Color(int.parse(
-          categoryString.substring(categoryString.indexOf(":") + 1).trim()));
+          categoryString!.substring(categoryString!.indexOf(":") + 1).trim()));
     }
   }
 
@@ -63,7 +63,7 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
             Form(
               key: _formKey,
               child: CategoryNameTextFormWidget(
-                categoryNameController: categoryNameController,
+                controller: categoryNameController,
               ),
             ),
             const SizedBox(
@@ -90,33 +90,34 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
             },
             child: Text('Cancel')),
         TextButton(
-            onPressed: () {
-              final isValid = _formKey.currentState!.validate();
-              if (isValid) {
-                if (widget.index == null) {
-                  widget.userProfile.categoryFieldList.add(
-                      categoryNameController.text +
-                          ":" +
-                          this.color.toString().substring(6, 16));
-                } else {
-                  widget.userProfile.categoryFieldList[widget.index!] =
-                      categoryNameController.text +
-                          ":" +
-                          this.color.toString().substring(6, 16);
-                }
-                final newUser = UserProfile(
-                    firestoreID: widget.userProfile.firestoreID,
-                    userID: widget.userProfile.userID,
-                    petID: widget.userProfile.petID,
-                    email: widget.userProfile.email.toLowerCase(),
-                    userName: widget.userProfile.userName,
-                    userPhotoURL: widget.userProfile.userPhotoURL,
-                    categoryFieldList: widget.userProfile.categoryFieldList);
-                userProfileProvider.editUser(newUser, widget.userProfile);
-                Navigator.pop(context);
+          child: Text(widget.index == null ? 'Add' : 'Save'),
+          onPressed: () {
+            final isValid = _formKey.currentState!.validate();
+            if (isValid) {
+              if (widget.index == null) {
+                widget.userProfile.categoryFieldList.add(
+                    categoryNameController.text +
+                        ":" +
+                        this.color.toString().substring(6, 16));
+              } else {
+                widget.userProfile.categoryFieldList[widget.index!] =
+                    categoryNameController.text +
+                        ":" +
+                        this.color.toString().substring(6, 16);
               }
-            },
-            child: Text(widget.index == null ? 'Add' : 'Save'))
+              final newUser = UserProfile(
+                  firestoreID: widget.userProfile.firestoreID,
+                  userID: widget.userProfile.userID,
+                  petID: widget.userProfile.petID,
+                  email: widget.userProfile.email.toLowerCase(),
+                  userName: widget.userProfile.userName,
+                  userPhotoURL: widget.userProfile.userPhotoURL,
+                  categoryFieldList: widget.userProfile.categoryFieldList);
+              userProfileProvider.editUser(newUser, widget.userProfile);
+              Navigator.pop(context);
+            }
+          },
+        )
       ],
     );
   }
