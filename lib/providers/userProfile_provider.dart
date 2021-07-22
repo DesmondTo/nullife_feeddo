@@ -6,7 +6,7 @@ class UserProfileProvider extends ChangeNotifier {
   UserProfile? _user;
 
   UserProfile? getCurrentUser() {
-    return _user;
+    return this._user;
   }
 
   void setUsers(List<UserProfile> users) =>

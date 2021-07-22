@@ -4,5 +4,5 @@ class TodoWeeklyData {
     this.duration,
   );
   final String category;
-  final int duration;
+  final double duration;
 }

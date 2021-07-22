@@ -49,7 +49,7 @@ class _GoalChartState extends State<GoalChart> {
             dataSource: _goals,
             xValueMapper: (Goal data, _) => data.category,
             yValueMapper: (Goal data, _) =>
-                double.parse((data.hour * 60 + data.minute).toStringAsFixed(2)),
+                double.parse((data.hour + data.minute / 60).toStringAsFixed(2)),
             dataLabelSettings: DataLabelSettings(
               isVisible: true,
             ),
