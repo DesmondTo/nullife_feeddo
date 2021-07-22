@@ -10,8 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-import '../../utils.dart';
-
 class CategoryButton extends StatefulWidget {
   final UserProfile userProfile;
   final int index;
@@ -84,13 +82,12 @@ class _CategoryButtonState extends State<CategoryButton> {
                 padding: const EdgeInsets.only(bottom: 15.0),
                 child: CircularPercentIndicator(
                   backgroundColor: Colors.transparent,
-                  progressColor:
-                      Utils.toProgressColor(category: widget.category),
+                  progressColor: autoColored(widget.buttonColor),
                   radius: MediaQuery.of(context).size.height * 0.1,
                   lineWidth: 7.5,
                   percent: completedPercentage / 100,
                   center: Text(
-                    'Completed\n${completedPercentage.toStringAsFixed(1)}',
+                    'Completed\n${completedPercentage.toStringAsFixed(1)}%',
                     style: GoogleFonts.boogaloo(
                       fontSize: MediaQuery.of(context).size.height * 0.015,
                       color: Colors.white,
@@ -153,5 +150,34 @@ class _CategoryButtonState extends State<CategoryButton> {
         );
         break;
     }
+  }
+
+  Color autoColored(Color color) {
+    double darkness = 1 -
+        (0.299 * color.red + 0.587 * color.green + 0.114 * color.blue) / 255;
+    if (darkness < 0.5825) {
+      return darken(color, 0.5825 - darkness); // It's a light color
+    } else {
+      return lighten(color, darkness - 0.5825); // It's a dark color
+    }
+  }
+
+  Color darken(Color color, [double amount = .1]) {
+    assert(amount >= 0 && amount <= 1);
+
+    final hsl = HSLColor.fromColor(color);
+    final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+
+    return hslDark.toColor();
+  }
+
+  Color lighten(Color color, [double amount = .1]) {
+    assert(amount >= 0 && amount <= 1);
+
+    final hsl = HSLColor.fromColor(color);
+    final hslLight =
+        hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+
+    return hslLight.toColor();
   }
 }

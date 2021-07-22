@@ -33,7 +33,9 @@ class _DashBoardChartState extends State<DashBoardChart> {
   void initState() {
     _todoProvider = Provider.of<TodoProvider>(context, listen: false);
     _chartData = _todoProvider.computeChartData(widget.categoryList);
-    _tooltipBehavior = TooltipBehavior(enable: true);
+    _tooltipBehavior = TooltipBehavior(
+      enable: true,
+    );
     _goals = widget.goals;
     _numOfHittedTarget = _chartData.fold(0, (int prev, TodoWeeklyData data) {
       Goal? match;
@@ -45,7 +47,12 @@ class _DashBoardChartState extends State<DashBoardChart> {
       return prev +
           (match == null
               ? 0
-              : ((match.hour * 60 + match.minute) == data.duration ? 1 : 0));
+              : ((match.hour + match.minute / 60) <= data.duration &&
+                      ((data.duration - (match.hour + match.minute / 60)) /
+                              data.duration) <
+                          0.1
+                  ? 1
+                  : 0));
     });
     _balanceLevel = _numOfHittedTarget * 100 / _goals.length;
 
@@ -54,34 +61,32 @@ class _DashBoardChartState extends State<DashBoardChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SfCircularChart(
-        title: ChartTitle(
-          text: buildTitle(),
-          textStyle: GoogleFonts.boogaloo(
-            color: Color(0xFF7EA3D4),
-            fontSize: 18,
-          ),
-          alignment: ChartAlignment.center,
+    return SfCircularChart(
+      title: ChartTitle(
+        text: buildTitle(),
+        textStyle: GoogleFonts.boogaloo(
+          color: Color(0xFF7EA3D4),
+          fontSize: 18,
         ),
-        legend: Legend(
-          isVisible: true,
-          overflowMode: LegendItemOverflowMode.wrap,
-        ),
-        tooltipBehavior: _tooltipBehavior,
-        series: <CircularSeries>[
-          DoughnutSeries<TodoWeeklyData, String>(
-            dataSource: _chartData,
-            xValueMapper: (TodoWeeklyData data, _) => data.category,
-            yValueMapper: (TodoWeeklyData data, _) =>
-                double.parse(data.duration.toStringAsFixed(2)),
-            dataLabelSettings: DataLabelSettings(
-              isVisible: true,
-            ),
-            enableTooltip: true,
-          ),
-        ],
+        alignment: ChartAlignment.center,
       ),
+      legend: Legend(
+        isVisible: true,
+        overflowMode: LegendItemOverflowMode.wrap,
+      ),
+      tooltipBehavior: _tooltipBehavior,
+      series: <CircularSeries>[
+        DoughnutSeries<TodoWeeklyData, String>(
+          dataSource: _chartData,
+          xValueMapper: (TodoWeeklyData data, _) => data.category,
+          yValueMapper: (TodoWeeklyData data, _) =>
+              double.parse(data.duration.toStringAsFixed(2)),
+          dataLabelSettings: DataLabelSettings(
+            isVisible: true,
+          ),
+          enableTooltip: true,
+        ),
+      ],
     );
   }
 

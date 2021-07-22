@@ -13,14 +13,12 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  final User? currentUser = FirebaseAuth.instance.currentUser;
-
   @override
   Widget build(BuildContext context) {
-    String userUID = currentUser!.uid;
     return SafeArea(
       child: StreamBuilder<List<UserProfile>>(
-          stream: UserFirebaseApi.readUsersByUID(userUID),
+          stream: UserFirebaseApi.readUsersByUID(
+              FirebaseAuth.instance.currentUser!.uid),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:

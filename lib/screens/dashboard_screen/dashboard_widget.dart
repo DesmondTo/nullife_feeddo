@@ -51,9 +51,12 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
                   return Column(
                     children: [
-                      DashBoardChart(
-                        categoryList: categoryList,
-                        goals: _goals,
+                      Expanded(
+                        flex: 2,
+                        child: DashBoardChart(
+                          categoryList: categoryList,
+                          goals: _goals,
+                        ),
                       ),
                       PetQuoteWidget(),
                     ],

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nullife_feeddo/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
@@ -101,18 +100,6 @@ class Utils {
       'NOV',
     ];
     return monthStrings[monthValue - 1];
-  }
-
-  static Color toProgressColor({required String category}) {
-    return category == 'Study'
-        ? studyProgressColor
-        : category == 'Self Care'
-            ? selfCareProgressColor
-            : category == 'Sports'
-                ? sportProgressColor
-                : category == 'Family Time'
-                    ? familyTimeProgressColor
-                    : Colors.white;
   }
 
   static SvgPicture toCategorySVG({required String category, required width}) {

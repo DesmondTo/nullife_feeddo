@@ -37,6 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    final provider = Provider.of<UserProfileProvider>(context, listen: false);
+    final user = provider.getCurrentUser();
     // Store the current user in this variable.
     final tabs = [
       DashboardWidget(),
@@ -45,9 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ScheduleWidget(),
       UserProfileScreen(),
     ];
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    final provider = Provider.of<UserProfileProvider>(context, listen: false);
-    final user = provider.getCurrentUser();
 
     return Scaffold(
       floatingActionButton: selectedIndex == 2

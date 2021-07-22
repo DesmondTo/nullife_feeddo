@@ -81,7 +81,7 @@ dependencies:
   flutter_colorpicker: ^0.4.0
 
   # Dashboard charts
-  syncfusion_flutter_charts: ^19.2.47+1
+  syncfusion_flutter_charts: ^19.2.46
 
 dev_dependencies:
   flutter_test:

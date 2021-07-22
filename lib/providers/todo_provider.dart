@@ -89,7 +89,7 @@ class TodoProvider extends ChangeNotifier {
     });
   }
 
-  int computeDuration(String category) {
+  double computeDuration(String category) {
     int completedDuration = _todos.fold(
         0,
         (int prevDuration, Todo todo) =>
@@ -97,7 +97,7 @@ class TodoProvider extends ChangeNotifier {
             (completedWithinWeekByCategory(category, todo)
                 ? todo.to.difference(todo.from).inMinutes
                 : 0));
-    return completedDuration;
+    return completedDuration / 60;
   }
 
   bool completedWithinWeekByCategory(String category, Todo todo) {
