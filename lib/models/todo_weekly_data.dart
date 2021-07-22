@@ -1,8 +1,8 @@
 class TodoWeeklyData {
   TodoWeeklyData(
     this.category,
-    this.percentage,
+    this.duration,
   );
   final String category;
-  final double percentage;
+  final int duration;
 }

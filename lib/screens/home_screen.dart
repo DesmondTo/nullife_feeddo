@@ -4,6 +4,7 @@ import 'package:nullife_feeddo/providers/userProfile_provider.dart';
 import 'package:nullife_feeddo/screens/account_screen/view_profile_screen.dart';
 import 'package:nullife_feeddo/screens/dashboard_screen/dashboard_widget.dart';
 import 'package:nullife_feeddo/screens/schedule_screen/schedule_widget.dart';
+import 'package:nullife_feeddo/screens/set_goal_screen/set_goal_screen.dart';
 import 'package:nullife_feeddo/todo_firebase_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,19 +16,32 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'category_screen/category_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  final int? defaultIndex;
+
+  HomeScreen({
+    this.defaultIndex,
+  });
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int selectedIndex = 0;
+  late int selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedIndex = widget.defaultIndex ?? 2;
+  }
 
   @override
   Widget build(BuildContext context) {
     // Store the current user in this variable.
     final tabs = [
-      CategoryScreen(),
       DashboardWidget(),
+      SetGoalScreen(),
+      CategoryScreen(),
       ScheduleWidget(),
       UserProfileScreen(),
     ];
@@ -36,9 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final user = provider.getCurrentUser();
 
     return Scaffold(
-      floatingActionButton: selectedIndex == 0
+      floatingActionButton: selectedIndex == 2
           ? FloatingActionButton(
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.blueAccent,
               onPressed: () {
                 showDialog(
                     context: context,
@@ -48,7 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Icon(
                 Icons.add,
                 color: Colors.white,
-              ))
+              ),
+            )
           : null,
       backgroundColor: Color(0xFFF9F1E4),
       bottomNavigationBar: buildBottomNavBar(),
@@ -79,33 +94,53 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   ConvexAppBar buildBottomNavBar() => ConvexAppBar(
+        initialActiveIndex: widget.defaultIndex ?? 2,
         elevation: 0,
-        backgroundColor: Color(0xFF374761),
+        backgroundColor: Color(0xFF322A37),
         color: Colors.white,
-        activeColor: Colors.white,
+        activeColor: selectedIndex == 0
+            ? Color(0xFFDFC03D)
+            : selectedIndex == 1
+                ? Color(0xFF4FAEDF)
+                : selectedIndex == 2
+                    ? Color(0xFF872BE1)
+                    : selectedIndex == 3
+                        ? Color(0xFFD62F80)
+                        : Color(0xFFA8DC99),
         style: TabStyle.react,
         items: [
           TabItem(
             icon: SvgPicture.asset(
+              'assets/icons/dashboard.svg',
+              color: Color(0xFFDFC03D),
+            ),
+            title: 'Dashboard',
+          ),
+          TabItem(
+            icon: SvgPicture.asset(
+              'assets/icons/goal.svg',
+              color: Color(0xFF4FAEDF),
+            ),
+            title: 'Goal',
+          ),
+          TabItem(
+            icon: SvgPicture.asset(
               'assets/icons/category.svg',
+              color: Color(0xFF872BE1),
             ),
             title: 'Category',
           ),
           TabItem(
             icon: SvgPicture.asset(
-              'assets/icons/dashboard.svg',
-            ),
-            title: 'Dashboard',
-          ),
-          TabItem(
-            icon: Image.asset(
-              "assets/icons/schedule.png",
+              "assets/icons/schedule.svg",
+              color: Color(0xFFD62F80),
             ),
             title: 'Schedule',
           ),
           TabItem(
             icon: SvgPicture.asset(
               'assets/icons/user.svg',
+              color: Color(0xFFA8DC99),
             ),
             title: 'Account',
           ),

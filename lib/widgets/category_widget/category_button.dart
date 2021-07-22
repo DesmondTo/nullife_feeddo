@@ -12,7 +12,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 
 import '../../utils.dart';
 
-class CategoryButton extends StatelessWidget {
+class CategoryButton extends StatefulWidget {
   final UserProfile userProfile;
   final int index;
   final String category;
@@ -27,18 +27,23 @@ class CategoryButton extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _CategoryButtonState createState() => _CategoryButtonState();
+}
+
+class _CategoryButtonState extends State<CategoryButton> {
+  @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TodoProvider>(context);
     double completedPercentage =
-        provider.completedPercentageByCategory(category);
+        provider.completedPercentageByCategory(widget.category);
 
     return GestureDetector(
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => TodoListWidget(
-                    category: this.category,
-                    bgColor: buttonColor,
+                    category: this.widget.category,
+                    bgColor: widget.buttonColor,
                   ))),
       child: Container(
         padding: const EdgeInsets.only(top: 0),
@@ -53,7 +58,7 @@ class CategoryButton extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '$category',
+                      '${widget.category}',
                       style: GoogleFonts.boogaloo(
                         fontSize: MediaQuery.of(context).size.height * 0.03,
                         color: Colors.white,
@@ -79,7 +84,8 @@ class CategoryButton extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 15.0),
                 child: CircularPercentIndicator(
                   backgroundColor: Colors.transparent,
-                  progressColor: Utils.toProgressColor(category: category),
+                  progressColor:
+                      Utils.toProgressColor(category: widget.category),
                   radius: MediaQuery.of(context).size.height * 0.1,
                   lineWidth: 7.5,
                   percent: completedPercentage / 100,
@@ -98,7 +104,7 @@ class CategoryButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
-          color: buttonColor,
+          color: widget.buttonColor,
           boxShadow: [
             BoxShadow(
               color: Colors.grey,
@@ -132,17 +138,17 @@ class CategoryButton extends StatelessWidget {
         showDialog(
             context: context,
             builder: (context) => EditCategoryDialog(
-                  userProfile: userProfile,
-                  index: index,
+                  userProfile: widget.userProfile,
+                  index: widget.index,
                 ));
         break;
       case MenuItems.itemDelete:
         showDialog(
           context: context,
           builder: (context) => DeleteCategoryDialog(
-            category: category,
-            index: index,
-            userProfile: userProfile,
+            category: widget.category,
+            index: widget.index,
+            userProfile: widget.userProfile,
           ),
         );
         break;

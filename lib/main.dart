@@ -1,4 +1,5 @@
 import 'package:nullife_feeddo/providers/email_signin_provider.dart';
+import 'package:nullife_feeddo/providers/goal_provider.dart';
 import 'package:nullife_feeddo/providers/google_signin_provider.dart';
 import 'package:nullife_feeddo/providers/todo_provider.dart';
 import 'package:nullife_feeddo/providers/userProfile_provider.dart';
@@ -47,6 +48,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => UserProfileProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GoalProvider(),
         ),
       ],
       child: MaterialApp(
