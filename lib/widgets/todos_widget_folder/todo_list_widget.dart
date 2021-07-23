@@ -59,15 +59,18 @@ class TodoListWidget extends StatelessWidget {
                         children: [
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.1,
-                            child: Text(
-                              this.category,
-                              style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.height * 0.075,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                            width: MediaQuery.of(context).size.width * 0.75,
+                            child: SingleChildScrollView(
+                              child: Text(
+                                this.category,
+                                style: TextStyle(
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      0.075,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
                             ),
                           ),
                           SizedBox(

@@ -72,7 +72,7 @@ class _DashBoardChartState extends State<DashBoardChart> {
       ),
       legend: Legend(
         isVisible: true,
-        overflowMode: LegendItemOverflowMode.wrap,
+        overflowMode: LegendItemOverflowMode.scroll,
       ),
       tooltipBehavior: _tooltipBehavior,
       series: <CircularSeries>[
