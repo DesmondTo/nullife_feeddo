@@ -53,25 +53,31 @@ class _CategoryButtonState extends State<CategoryButton> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '${widget.category}',
-                      style: GoogleFonts.boogaloo(
-                        fontSize: MediaQuery.of(context).size.height * 0.03,
-                        color: Colors.white,
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          '${widget.category}',
+                          style: GoogleFonts.boogaloo(
+                            fontSize: MediaQuery.of(context).size.height * 0.03,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  PopupMenuButton<MenuItem>(
-                    icon: Icon(
-                      Icons.more_horiz,
-                      color: Colors.white,
+                  Expanded(
+                    child: PopupMenuButton<MenuItem>(
+                      icon: Icon(
+                        Icons.more_horiz,
+                        color: Colors.white,
+                      ),
+                      onSelected: (MenuItem item) => onSelected(context, item),
+                      itemBuilder: (BuildContext context) => [
+                        ...MenuItems.categoryMenu.map(buildItem).toList(),
+                      ],
                     ),
-                    onSelected: (MenuItem item) => onSelected(context, item),
-                    itemBuilder: (BuildContext context) => [
-                      ...MenuItems.categoryMenu.map(buildItem).toList(),
-                    ],
                   ),
                 ],
               ),
