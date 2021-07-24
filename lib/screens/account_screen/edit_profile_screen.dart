@@ -137,7 +137,7 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
                             ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Color.fromRGBO(236, 177, 134, 1),
+                              primary: Color.fromRGBO(165, 145, 113, 0.6),
                               shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10.0))),
@@ -160,7 +160,7 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
                                   emailController.text.toLowerCase())
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Color.fromRGBO(236, 177, 134, 1),
+                                primary: Color.fromRGBO(165, 145, 113, 0.5),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(10.0))),
@@ -185,7 +185,7 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
                           ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Color.fromRGBO(236, 177, 134, 1),
+                              primary: Color.fromRGBO(165, 145, 113, 1),
                               shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10.0))),

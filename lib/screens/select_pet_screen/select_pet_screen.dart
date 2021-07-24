@@ -155,7 +155,7 @@ class _PageViewWidgetState extends State<PageViewWidget> {
                   email: widget.user!.email.toLowerCase(),
                   userName: widget.user!.userName,
                   userPhotoURL: widget.user!.userPhotoURL,
-                  categoryFieldList: defaultList);
+                  categoryFieldList: widget.user!.categoryFieldList);
               userProfileProvider.editUser(newUser, widget.user!);
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => HomeScreen()));

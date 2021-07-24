@@ -38,7 +38,7 @@ class TimeTextFormWidget extends StatelessWidget {
 
   bool checkRange(int duration) {
     if (unit == 'Hour') {
-      return duration < 0;
+      return duration < 0 || duration >= 126;
     } else {
       return duration < 0 || duration >= 60;
     }

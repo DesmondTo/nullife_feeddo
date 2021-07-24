@@ -10,7 +10,12 @@ class Utils {
   static void showSnackBar(BuildContext context, String text) =>
       ScaffoldMessenger.of(context)
         ..removeCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(text)));
+        ..showSnackBar(SnackBar(
+          content: Text(text),
+          duration: Duration(
+            seconds: 1,
+          ),
+        ));
 
   static DateTime toDateTime(Timestamp value) {
     return value.toDate();

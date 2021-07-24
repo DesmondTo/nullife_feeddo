@@ -46,7 +46,10 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                 } else {
                   final List<Goal>? _goals = snapshot.data;
 
-                  final provider = Provider.of<GoalProvider>(context);
+                  final provider = Provider.of<GoalProvider>(
+                    context,
+                    listen: false,
+                  );
                   provider.setGoals(_goals!);
 
                   return DashBoardChart(
