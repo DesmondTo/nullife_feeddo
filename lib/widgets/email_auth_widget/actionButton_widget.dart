@@ -120,16 +120,6 @@ class ActionButton extends StatelessWidget {
             ? Navigator.pop(context)
             : Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => EmailVerifyScreen()));
-        // } else {
-        //   final message =
-        //       'Please check your credentials or create a new account if you haven\'t!';
-
-        //   ScaffoldMessenger.of(pageContext).showSnackBar(
-        //     SnackBar(
-        //       content: Text(message),
-        //       backgroundColor: Theme.of(pageContext).errorColor,
-        //     ),
-        //   );
       }
     }
   }
