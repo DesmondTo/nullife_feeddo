@@ -60,7 +60,7 @@ class _PetQuoteWidgetState extends State<PetQuoteWidget> {
                         _balanceLevel >= 66.70
                             ? "assets/pet/water_happy.gif"
                             : "assets/pet/water_meh.gif",
-                        width: MediaQuery.of(context).size.width / 1.7,
+                        width: MediaQuery.of(context).size.width / 1.9,
                         fit: BoxFit.cover,
                       )
                     : _petID == 1 && _balanceLevel < 33.33

@@ -40,15 +40,19 @@ class _SetGoalScreenState extends State<SetGoalScreen> {
               } else {
                 final List<Goal>? goals = snapshot.data;
 
-                final provider = Provider.of<GoalProvider>(context);
+                final provider = Provider.of<GoalProvider>(
+                  context,
+                  listen: false,
+                );
                 List<Goal> _goals = provider.goals;
                 List<String> existingCategory =
                     _goals.map((goal) => goal.category).toList();
 
                 provider.setGoals(goals!);
                 return Scaffold(
+                  backgroundColor: Color.fromRGBO(193, 197, 175, 0.5),
                   floatingActionButton: FloatingActionButton(
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: Color.fromRGBO(98, 102, 79, 2),
                     child: Icon(
                       Icons.add,
                       color: Colors.white,
@@ -81,7 +85,7 @@ class _SetGoalScreenState extends State<SetGoalScreen> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: _goals.isEmpty
+                        child: goals.isEmpty
                             ? Center(
                                 child: Text(
                                   'No goals added',
@@ -92,11 +96,14 @@ class _SetGoalScreenState extends State<SetGoalScreen> {
                                 padding: EdgeInsets.all(16),
                                 separatorBuilder: (context, index) =>
                                     Container(height: 8),
-                                itemCount: _goals.length,
+                                itemCount: goals.length,
                                 itemBuilder: (context, index) {
                                   return GoalWidget(
-                                    goal: _goals[index],
+                                    goal: goals[index],
                                     existingCategory: existingCategory,
+                                    onChanged: () {
+                                      setState(() {});
+                                    },
                                   );
                                 },
                               ),

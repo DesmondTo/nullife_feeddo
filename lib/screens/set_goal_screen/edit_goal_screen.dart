@@ -1,9 +1,10 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nullife_feeddo/models/goal_model.dart';
 import 'package:nullife_feeddo/providers/goal_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nullife_feeddo/screens/home_screen.dart';
 import 'package:nullife_feeddo/widgets/goal/time_textForm_widget.dart';
+import 'package:nullife_feeddo/widgets/login/login_widget.dart';
 import 'package:provider/provider.dart';
 
 class GoalEditingScreen extends StatefulWidget {
@@ -28,11 +29,12 @@ class _GoalEditingScreenState extends State<GoalEditingScreen> {
   late String? dropDownValue;
   late List<String> dropDownList;
   late DateTime createdTime;
+  bool allAdded = false;
 
   @override
   void initState() {
     super.initState();
-
+    if (widget.categoryList!.isEmpty) allAdded = true;
     if (widget.goal == null) {
       createdTime = DateTime.now();
       hourController.text = '2';
@@ -69,23 +71,45 @@ class _GoalEditingScreenState extends State<GoalEditingScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: CloseButton(),
-        actions: buildEditingActions(),
+        backgroundColor: Color.fromRGBO(190, 204, 168, 1),
+        actions: allAdded ? null : buildEditingActions(),
       ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(12),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              buildDropDownButton(),
               SizedBox(
-                height: 20,
+                height: 30,
+              ),
+              FittedBox(
+                fit: BoxFit.contain,
+                child: Padding(
+                  padding: EdgeInsets.all(2),
+                  child: Text(
+                    "SELECT A CATEGORY",
+                    style: GoogleFonts.boogaloo(
+                      fontSize: 25,
+                      color: Color.fromRGBO(134, 147, 114, 1),
+                    ),
+                  ),
+                ),
+              ),
+              allAdded ? buildAddCategoryButton() : buildDropDownButton(),
+              SizedBox(
+                height: 30,
               ),
               Row(
                 children: [
                   Expanded(
                     child: Text(
-                      'Hour',
+                      "Hour",
+                      style: GoogleFonts.boogaloo(
+                        fontSize: 28,
+                        color: Color.fromRGBO(115, 126, 96, 1),
+                      ),
                     ),
                   ),
                   Expanded(
@@ -97,6 +121,10 @@ class _GoalEditingScreenState extends State<GoalEditingScreen> {
                   Expanded(
                     child: Text(
                       'Minute',
+                      style: GoogleFonts.boogaloo(
+                        fontSize: 28,
+                        color: Color.fromRGBO(115, 126, 96, 1),
+                      ),
                     ),
                   ),
                   Expanded(
@@ -114,16 +142,54 @@ class _GoalEditingScreenState extends State<GoalEditingScreen> {
     );
   }
 
+  ElevatedButton buildAddCategoryButton() => ElevatedButton.icon(
+        onPressed: () => Navigator.pop(context),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          side: BorderSide(
+            color: Colors.white,
+            width: 3,
+          ),
+        ),
+        icon: CircleAvatar(
+          radius: 15,
+          backgroundColor: Color.fromRGBO(190, 204, 168, 1),
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+        ),
+        label: Text(
+          'Add a category from category list!',
+          style: GoogleFonts.boogaloo(
+            fontSize: 20,
+            color: Color.fromRGBO(134, 147, 114, 1),
+          ),
+        ),
+      );
+
   DropdownButton<String> buildDropDownButton() => DropdownButton<String>(
         value: dropDownValue,
         disabledHint: Text('Please add a category in category page'),
-        icon: const Icon(Icons.arrow_downward),
+        icon: CircleAvatar(
+            radius: 15,
+            backgroundColor: Color.fromRGBO(190, 204, 168, 1),
+            child: Icon(
+              Icons.arrow_downward,
+              color: Colors.white,
+            )),
         iconSize: 24,
         elevation: 16,
-        style: const TextStyle(color: Colors.deepPurple),
+        style: GoogleFonts.boogaloo(
+          fontSize: 20,
+          color: Color.fromRGBO(134, 147, 114, 1),
+        ),
         underline: Container(
-          height: 2,
-          color: Colors.deepPurpleAccent,
+          height: 3,
+          color: Color.fromRGBO(190, 204, 168, 1),
         ),
         onChanged: (String? newValue) {
           setState(() {
@@ -155,8 +221,48 @@ class _GoalEditingScreenState extends State<GoalEditingScreen> {
       ];
 
   Future saveForm() async {
-    final isValid = _formKey.currentState!.validate() &&
-        dropDownValue != 'No existing category';
+    final isValid = _formKey.currentState!.validate();
+
+    if (int.parse(hourController.text) * 60 +
+            int.parse(minuteController.text) ==
+        0) {
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          content: Text('Don\'t be lazy, make it longer!'),
+          backgroundColor: Theme.of(context).hintColor,
+          duration: Duration(
+            seconds: 2,
+          ),
+        ));
+      return;
+    }
+
+    if (dropDownValue == 'Add a category') {
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          content: Text('Add a category from the category page first!'),
+          backgroundColor: Theme.of(context).hintColor,
+          duration: Duration(
+            seconds: 2,
+          ),
+        ));
+      return;
+    }
+
+    if (dropDownValue == 'Choose a category') {
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          content: Text('Choose a category from the list please!'),
+          backgroundColor: Theme.of(context).hintColor,
+          duration: Duration(
+            seconds: 2,
+          ),
+        ));
+      return;
+    }
 
     if (isValid) {
       final goal = Goal(
@@ -178,7 +284,8 @@ class _GoalEditingScreenState extends State<GoalEditingScreen> {
       } else {
         provider.addGoal(goal);
       }
-      Navigator.pop(context);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LogInWidget()));
     }
   }
 }

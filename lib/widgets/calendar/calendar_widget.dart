@@ -8,13 +8,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+//import 'package:pinch_zoom/pinch_zoom.dart';
 
-class CalendarWidget extends StatelessWidget {
+double _timegap = 0.10;
+
+class CalendarWidget extends StatefulWidget {
   const CalendarWidget({Key? key}) : super(key: key);
 
   @override
+  _CalendarWidgetState createState() => _CalendarWidgetState();
+}
+
+class _CalendarWidgetState extends State<CalendarWidget> {
+  @override
   Widget build(BuildContext context) {
-    final todos = Provider.of<TodoProvider>(context).todos;
+    final todos = Provider.of<TodoProvider>(context, listen: false).todos;
     int currentHour = DateTime.now().hour;
 
     return Stack(
@@ -50,50 +58,145 @@ class CalendarWidget extends StatelessWidget {
             ),
           ),
         ),
-        SfCalendar(
-          view: CalendarView.day,
-          showCurrentTimeIndicator: true,
-          backgroundColor: Colors.transparent,
-          dataSource: TodoDataSource(todos),
-          todayTextStyle: GoogleFonts.boogaloo(),
-          headerStyle: CalendarHeaderStyle(
-            backgroundColor: Colors.transparent,
-            textStyle: GoogleFonts.roboto(
-              fontWeight: FontWeight.bold,
-              fontSize: MediaQuery.of(context).size.height * 0.05,
-              color: currentHour >= 6 && currentHour < 12
-                  ? Colors.black
-                  : Colors.white,
+        Stack(
+          children: [
+            Positioned(
+              top: MediaQuery.of(context).size.height / 8,
+              left: -MediaQuery.of(context).size.width / 20,
+              child: Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width,
+                height: 60,
+                decoration: new BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20)),
+                  shape: BoxShape.rectangle,
+                  color: currentHour >= 6 && currentHour < 12
+                      ? Color.fromRGBO(16, 77, 95, 0.3)
+                      : currentHour >= 12 && currentHour < 17
+                          ? Color.fromRGBO(255, 111, 65, 0.3)
+                          : currentHour >= 17 && currentHour < 19
+                              ? Color.fromRGBO(95, 75, 113, 0.4)
+                              : Color.fromRGBO(72, 94, 117, 0.4),
+                ),
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
-          viewHeaderStyle: ViewHeaderStyle(
-            dateTextStyle: GoogleFonts.boogaloo(
-              color: Colors.black,
-            ),
-            dayTextStyle: GoogleFonts.boogaloo(
-              color: Colors.black,
-            ),
-          ),
-          headerHeight: MediaQuery.of(context).size.height * 0.15,
-          timeSlotViewSettings: TimeSlotViewSettings(
-            timeTextStyle: GoogleFonts.boogaloo(
-              color: Colors.black,
-            ),
-            timeIntervalHeight: MediaQuery.of(context).size.height * 0.1,
-          ),
-          initialSelectedDate: DateTime.now(),
-          cellBorderColor: Colors.transparent,
-          appointmentBuilder: appointmentBuilder,
-          onLongPress: (details) {
-            final provider = Provider.of<TodoProvider>(context, listen: false);
+            SfCalendar(
+              view: CalendarView.day,
+              showCurrentTimeIndicator: true,
+              showDatePickerButton: true,
+              backgroundColor: Colors.transparent,
+              dataSource: TodoDataSource(todos),
+              todayTextStyle: GoogleFonts.boogaloo(),
+              headerStyle: CalendarHeaderStyle(
+                backgroundColor: Colors.transparent,
+                textStyle: GoogleFonts.roboto(
+                  fontWeight: FontWeight.bold,
+                  fontSize: MediaQuery.of(context).size.height * 0.05,
+                  color: currentHour >= 6 && currentHour < 12
+                      ? Colors.black
+                      : Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              viewHeaderStyle: ViewHeaderStyle(
+                dateTextStyle: GoogleFonts.boogaloo(
+                  color: Colors.black,
+                ),
+                dayTextStyle: GoogleFonts.boogaloo(
+                  color: Colors.black,
+                ),
+              ),
+              headerHeight: MediaQuery.of(context).size.height * 0.15,
+              timeSlotViewSettings: TimeSlotViewSettings(
+                timeTextStyle: GoogleFonts.boogaloo(
+                  color: Colors.black,
+                ),
+                timeIntervalHeight:
+                    MediaQuery.of(context).size.height * _timegap,
+              ),
+              initialSelectedDate: DateTime.now(),
+              cellBorderColor: Colors.transparent,
+              appointmentBuilder: appointmentBuilder,
+              onLongPress: (details) {
+                final provider =
+                    Provider.of<TodoProvider>(context, listen: false);
 
-            provider.setDate(details.date!);
-            showModalBottomSheet(
-              context: context,
-              builder: (context) => TasksWidget(),
-            );
-          },
+                provider.setDate(details.date!);
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => TasksWidget(),
+                );
+              },
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height / 6,
+              right: MediaQuery.of(context).size.width / 13,
+              child: Container(
+                alignment: Alignment.bottomRight,
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.zoom_in_rounded),
+                      color: currentHour >= 6 && currentHour < 12
+                          ? Color.fromRGBO(16, 77, 95, 1)
+                          : currentHour >= 12 && currentHour < 17
+                              ? Color.fromRGBO(255, 111, 65, 1)
+                              : currentHour >= 17 && currentHour < 19
+                                  ? Color.fromRGBO(95, 75, 113, 1)
+                                  : Color.fromRGBO(72, 94, 117, 1),
+                      onPressed: () {
+                        setState(() {
+                          if (_timegap <= 1) {
+                            _timegap = _timegap + 0.25;
+                          } else {
+                            _timegap = _timegap;
+                          }
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.zoom_out_rounded),
+                      color: currentHour >= 6 && currentHour < 12
+                          ? Color.fromRGBO(16, 77, 95, 1)
+                          : currentHour >= 12 && currentHour < 17
+                              ? Color.fromRGBO(255, 111, 65, 1)
+                              : currentHour >= 17 && currentHour < 19
+                                  ? Color.fromRGBO(95, 75, 113, 1)
+                                  : Color.fromRGBO(72, 94, 117, 1),
+                      onPressed: () {
+                        setState(() {
+                          if (_timegap >= 0.25) {
+                            _timegap = _timegap - 0.25;
+                          } else {
+                            _timegap = 0.1;
+                          }
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.aspect_ratio_rounded),
+                      color: currentHour >= 6 && currentHour < 12
+                          ? Color.fromRGBO(16, 77, 95, 1)
+                          : currentHour >= 12 && currentHour < 17
+                              ? Color.fromRGBO(255, 111, 65, 1)
+                              : currentHour >= 17 && currentHour < 19
+                                  ? Color.fromRGBO(95, 75, 113, 1)
+                                  : Color.fromRGBO(72, 94, 117, 1),
+                      onPressed: () {
+                        setState(() {
+                          _timegap = _timegap - 0.25;
+                          _timegap = 0.1;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -111,7 +214,7 @@ class CalendarWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(3),
               height: todo.to.difference(todo.from).inMinutes <= 10
-                  ? details.bounds.height * 0.8
+                  ? details.bounds.height * 0.7
                   : details.bounds.height * 0.3,
               alignment: Alignment.topLeft,
               decoration: BoxDecoration(
@@ -176,35 +279,54 @@ class CalendarWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              height: todo.to.difference(todo.from).inMinutes <= 10
-                  ? details.bounds.height * 0.1
-                  : details.bounds.height * 0.6,
-              padding: EdgeInsets.fromLTRB(3, 5, 3, 2),
-              color: todo.backgroundColor.withOpacity(0.8),
-              alignment: Alignment.topLeft,
-              child: SingleChildScrollView(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    child: Utils.toCategorySVG(
-                      category: todo.category,
-                      width: details.bounds.width,
-                    ),
-                  ),
-                  Text(
-                    todo.description,
-                    style: GoogleFonts.boogaloo(
-                      color: Colors.white,
-                      fontSize: 10,
-                    ),
+            todo.to.difference(todo.from).inMinutes <= 10
+                ? Container(
+                    height: details.bounds.height * 0.2,
+                    padding: EdgeInsets.fromLTRB(3, 5, 3, 2),
+                    color: todo.backgroundColor.withOpacity(0.8),
+                    alignment: Alignment.topLeft,
+                    child: SingleChildScrollView(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          todo.description,
+                          style: GoogleFonts.boogaloo(
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
+                        )
+                      ],
+                    )),
                   )
-                ],
-              )),
-            ),
+                : Container(
+                    height: details.bounds.height * 0.6,
+                    padding: EdgeInsets.fromLTRB(3, 5, 3, 2),
+                    color: todo.backgroundColor.withOpacity(0.8),
+                    alignment: Alignment.topLeft,
+                    child: SingleChildScrollView(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Utils.toCategorySVG(
+                            category: todo.category,
+                            width: details.bounds.width,
+                          ),
+                        ),
+                        Text(
+                          todo.description,
+                          style: GoogleFonts.boogaloo(
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
+                        )
+                      ],
+                    )),
+                  ),
             Container(
               height: details.bounds.height * 0.1,
               decoration: BoxDecoration(

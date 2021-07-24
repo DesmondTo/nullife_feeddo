@@ -41,31 +41,60 @@ class _GoalChartState extends State<GoalChart> {
 
   @override
   Widget build(BuildContext context) {
-    return SfCircularChart(
-      title: ChartTitle(
-        text: buildTitle(),
-        textStyle: GoogleFonts.boogaloo(
-          color: Color(0xFF7EA3D4),
-          fontSize: 18,
-        ),
-        alignment: ChartAlignment.center,
-      ),
-      legend: Legend(
-        isVisible: true,
-      ),
-      tooltipBehavior: _tooltipBehavior,
-      series: <CircularSeries>[
-        DoughnutSeries<Goal, String>(
-          dataSource: _goals,
-          xValueMapper: (Goal data, _) => data.category,
-          yValueMapper: (Goal data, _) =>
-              double.parse((data.hour + data.minute / 60).toStringAsFixed(2)),
-          dataLabelSettings: DataLabelSettings(
-            isVisible: true,
+    return Column(
+      children: [
+        buildHeader(),
+        Container(
+          padding: EdgeInsets.only(top: 30),
+          width: MediaQuery.of(context).size.width / 1.05,
+          height: MediaQuery.of(context).size.height / 2.7,
+          child: SfCircularChart(
+            borderColor: Colors.white,
+            borderWidth: 4,
+            backgroundColor: Color.fromRGBO(193, 197, 175, 1),
+            legend: Legend(
+              isVisible: true,
+            ),
+            tooltipBehavior: _tooltipBehavior,
+            series: <CircularSeries>[
+              DoughnutSeries<Goal, String>(
+                dataSource: _goals,
+                xValueMapper: (Goal data, _) => data.category,
+                yValueMapper: (Goal data, _) => double.parse(
+                    (data.hour + data.minute / 60).toStringAsFixed(2)),
+                dataLabelSettings: DataLabelSettings(
+                  isVisible: true,
+                ),
+                enableTooltip: true,
+              ),
+            ],
           ),
-          enableTooltip: true,
         ),
       ],
+    );
+  }
+
+  Widget buildHeader() {
+    return Container(
+      height: 70,
+      padding: const EdgeInsets.all(5.0),
+      decoration: BoxDecoration(
+          color: Color.fromRGBO(152, 159, 122, 1),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          border:
+              Border.all(color: Color.fromRGBO(234, 236, 228, 1), width: 3)),
+      child: Padding(
+        padding: EdgeInsets.all(5),
+        child: SingleChildScrollView(
+          child: Text(
+            "YOUR WEEKLY SET GOAL",
+            style: GoogleFonts.boogaloo(
+              color: Colors.white,
+              fontSize: 30,
+            ),
+          ),
+        ),
+      ),
     );
   }
 

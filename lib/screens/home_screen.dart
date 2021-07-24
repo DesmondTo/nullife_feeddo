@@ -52,12 +52,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButton: selectedIndex == 2
           ? FloatingActionButton(
-              backgroundColor: Colors.blueAccent,
+              backgroundColor: Colors.black,
               onPressed: () {
                 showDialog(
-                    context: context,
-                    builder: (context) =>
-                        EditCategoryDialog(userProfile: user!, index: null));
+                  context: context,
+                  builder: (context) =>
+                      EditCategoryDialog(userProfile: user!, index: null),
+                );
               },
               child: Icon(
                 Icons.add,
