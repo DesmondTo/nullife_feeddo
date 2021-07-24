@@ -29,6 +29,7 @@ class ProfileEdittingScreen extends StatefulWidget {
 }
 
 class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
+  final auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   final userNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -41,6 +42,7 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
   late Timer _timer;
   int _countDown = 300;
   bool showCountDown = false;
+  late bool showChange;
 
   @override
   void initState() {
@@ -51,6 +53,10 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
     passwordController.text = '';
     userPhotoURL = user.userPhotoURL;
     isChanging = true;
+    showCountDown = false;
+    showChange =
+        FirebaseAuth.instance.currentUser!.providerData.first.providerId !=
+            'google.com';
   }
 
   @override
@@ -66,101 +72,95 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: CloseButton(
-            onPressed: () => Navigator.pop(context),
+      child: WillPopScope(
+        onWillPop: () async {
+          if (!isChanging) {
+            await FirebaseAuth.instance.currentUser!.updateEmail(
+              widget.userProfile.email.toLowerCase(),
+            );
+          }
+          Navigator.pop(context);
+          return false;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: CloseButton(
+              onPressed: () async {
+                if (!isChanging) {
+                  await FirebaseAuth.instance.currentUser!.updateEmail(
+                    widget.userProfile.email.toLowerCase(),
+                  );
+                }
+                Navigator.pop(context);
+              },
+            ),
           ),
-        ),
-        extendBodyBehindAppBar: true,
-        body: SingleChildScrollView(
-          child: Container(
-            alignment: Alignment.center,
-            height: MediaQuery.of(context).size.height,
-            child: Flex(
-              direction: Axis.vertical,
-              children: [
-                Expanded(
-                  child: buildUpperBackground(),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.only(top: 0.0),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          if (isChanging)
-                            Text(
-                              'Change UserName',
-                              style: GoogleFonts.boogaloo(
-                                fontSize: 18,
+          extendBodyBehindAppBar: true,
+          body: SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              height: MediaQuery.of(context).size.height,
+              child: Flex(
+                direction: Axis.vertical,
+                children: [
+                  Expanded(
+                    child: buildUpperBackground(),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.only(top: 0.0),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            if (isChanging)
+                              Text(
+                                'Change UserName',
+                                style: GoogleFonts.boogaloo(
+                                  fontSize: 18,
+                                ),
+                                textAlign: TextAlign.start,
                               ),
-                              textAlign: TextAlign.start,
-                            ),
-                          if (isChanging)
-                            UserNameTextFormWidget(
-                              userNameController: userNameController,
-                            ),
-                          if (isChanging)
-                            SizedBox(
-                              height: 12,
-                            ),
-                          if (isChanging)
-                            Text(
-                              'Change Email',
-                              style: GoogleFonts.boogaloo(
-                                fontSize: 18,
+                            if (isChanging)
+                              UserNameTextFormWidget(
+                                userNameController: userNameController,
                               ),
-                            ),
-                          if (isChanging)
-                            EmailTextFormWidget(
-                              emailController: emailController,
-                            ),
-                          if (isChanging)
-                            SizedBox(
-                              height: 12,
-                            ),
-                          if (!isChanging)
-                            Text(
-                              'Provide your current password to verify',
-                              style: GoogleFonts.boogaloo(
-                                fontSize: 18,
+                            if (isChanging)
+                              SizedBox(
+                                height: 12,
                               ),
-                            ),
-                          if (!isChanging)
-                            PasswordTextFormWidget(
-                              passwordController: passwordController,
-                              hintText: 'Current password',
-                            ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Color.fromRGBO(165, 145, 113, 0.6),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0))),
-                            ),
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SelectPetScreen(
-                                          user: widget.userProfile,
-                                        ))),
-                            child: Text(
-                              'Change Pet',
-                              style: GoogleFonts.boogaloo(
-                                  fontSize: MediaQuery.of(context).size.width *
-                                      0.075),
-                            ),
-                          ),
-                          if (isChanging ||
-                              widget.userProfile.email.toLowerCase() ==
-                                  emailController.text.toLowerCase())
+                            if (isChanging && showChange)
+                              Text(
+                                'Change Email',
+                                style: GoogleFonts.boogaloo(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            if (isChanging && showChange)
+                              EmailTextFormWidget(
+                                emailController: emailController,
+                              ),
+                            if (isChanging)
+                              SizedBox(
+                                height: 12,
+                              ),
+                            if (!isChanging)
+                              Text(
+                                'Provide your current password to verify',
+                                style: GoogleFonts.boogaloo(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            if (!isChanging)
+                              PasswordTextFormWidget(
+                                passwordController: passwordController,
+                                hintText: 'Current password',
+                              ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Color.fromRGBO(165, 145, 113, 0.5),
+                                primary: Color.fromRGBO(165, 145, 113, 0.6),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(10.0))),
@@ -168,44 +168,78 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
                               onPressed: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChangePasswordScreen(
-                                            userProfile: widget.userProfile,
+                                      builder: (context) => SelectPetScreen(
+                                            user: widget.userProfile,
                                           ))),
                               child: Text(
-                                'Change Password',
+                                'Change Pet',
                                 style: GoogleFonts.boogaloo(
                                     fontSize:
                                         MediaQuery.of(context).size.width *
                                             0.075),
                               ),
                             ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Color.fromRGBO(165, 145, 113, 1),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0))),
+                            if ((isChanging ||
+                                    widget.userProfile.email.toLowerCase() ==
+                                        emailController.text.toLowerCase()) &&
+                                showChange)
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color.fromRGBO(165, 145, 113, 0.5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0))),
+                                ),
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangePasswordScreen(
+                                              userProfile: widget.userProfile,
+                                            ))),
+                                child: Text(
+                                  'Change Password',
+                                  style: GoogleFonts.boogaloo(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.075),
+                                ),
+                              ),
+                            SizedBox(
+                              height: 12,
                             ),
-                            onPressed: saveForm,
-                            child: Text(
-                              isChanging ? 'Save' : 'Confirm',
-                              style: GoogleFonts.boogaloo(
-                                  fontSize: MediaQuery.of(context).size.width *
-                                      0.075),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Color.fromRGBO(165, 145, 113, 1),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
+                              ),
+                              onPressed: saveForm,
+                              child: Text(
+                                isChanging ? 'Save' : 'Confirm',
+                                style: GoogleFonts.boogaloo(
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.075,
+                                ),
+                              ),
                             ),
-                          ),
-                          if (showCountDown)
-                            Text('Verify in $_countDown seconds.'),
-                        ],
+                            if (showCountDown && !isChanging)
+                              Text(
+                                'Verify your new email within $_countDown seconds.',
+                                style: GoogleFonts.boogaloo(
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.05,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -282,7 +316,6 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
             emailController.text.toLowerCase())) {
       setState(() {
         isChanging = false;
-        showCountDown = true;
       });
       return;
     }
@@ -316,6 +349,10 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
           );
 
           FirebaseAuth.instance.currentUser!.sendEmailVerification();
+
+          setState(() {
+            showCountDown = true;
+          });
 
           _timer = new Timer.periodic(
             Duration(seconds: 1),
@@ -394,26 +431,27 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
           ),
         ),
         Positioned(
-            top: MediaQuery.of(context).size.width * 0.25,
-            left: MediaQuery.of(context).size.width * 0.25,
-            child: Stack(
-              children: [
-                buildProfileImage(),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: RawMaterialButton(
-                    fillColor: Color.fromRGBO(165, 145, 113, 1),
-                    splashColor: Color.fromRGBO(29, 20, 13, 1),
-                    child: Icon(Icons.edit),
-                    onPressed: selectAndUploadFile,
-                    shape: CircleBorder(
-                        side: BorderSide(
-                            width: 3, color: Color.fromRGBO(29, 20, 13, 1))),
-                  ),
+          top: MediaQuery.of(context).size.width * 0.25,
+          left: MediaQuery.of(context).size.width * 0.25,
+          child: Stack(
+            children: [
+              buildProfileImage(),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: RawMaterialButton(
+                  fillColor: Color.fromRGBO(165, 145, 113, 1),
+                  splashColor: Color.fromRGBO(29, 20, 13, 1),
+                  child: Icon(Icons.edit),
+                  onPressed: selectAndUploadFile,
+                  shape: CircleBorder(
+                      side: BorderSide(
+                          width: 3, color: Color.fromRGBO(29, 20, 13, 1))),
                 ),
-              ],
-            ))
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

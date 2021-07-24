@@ -240,15 +240,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ],
         ),
         onPressed: () {
-          final googleProvider =
-              Provider.of<GoogleSignInProvider>(context, listen: false);
-          final emailProvider =
-              Provider.of<EmailSignInProvider>(context, listen: false);
-          if (FirebaseAuth.instance.currentUser!.displayName == '' ||
-              FirebaseAuth.instance.currentUser!.displayName == null) {
-            emailProvider.logout();
-          } else {
+          if (FirebaseAuth
+                  .instance.currentUser!.providerData.first.providerId ==
+              'google.com') {
+            final googleProvider =
+                Provider.of<GoogleSignInProvider>(context, listen: false);
             googleProvider.logout();
+          } else {
+            final emailProvider =
+                Provider.of<EmailSignInProvider>(context, listen: false);
+            emailProvider.logout();
           }
         },
         shape: RoundedRectangleBorder(
