@@ -134,7 +134,6 @@ class _PageViewWidgetState extends State<PageViewWidget> {
         if (angle > 0.5) {
           angle = 1 - angle;
         }
-
         return GestureDetector(
           onTap: () {
             if (widget.user == null) {
@@ -184,17 +183,18 @@ class _PageViewWidgetState extends State<PageViewWidget> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(223, 234, 226, 1),
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
-                                width: 5.0, color: const Color(0xFFFFFFFF))),
+                                width: 5.0,
+                                color: Color.fromRGBO(223, 234, 226, 1))),
                       ),
                       Positioned(
-                        top: MediaQuery.of(context).size.height / 10,
-                        left: 20,
+                        top: MediaQuery.of(context).size.height / 50,
+                        right: -MediaQuery.of(context).size.width / 2,
                         child: Image.asset(
                           _petList[index].petImagesName[0],
-                          width: MediaQuery.of(context).size.width / 1.6,
+                          width: MediaQuery.of(context).size.width / 0.6,
                           fit: BoxFit.cover,
                         ),
                       ),

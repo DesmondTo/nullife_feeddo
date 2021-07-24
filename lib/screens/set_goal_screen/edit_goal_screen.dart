@@ -37,8 +37,9 @@ class _GoalEditingScreenState extends State<GoalEditingScreen> {
       createdTime = DateTime.now();
       hourController.text = '2';
       minuteController.text = '0';
-      dropDownValue = null;
+      dropDownValue = 'Choose a category';
       dropDownList = widget.categoryList!;
+      dropDownList.add(dropDownValue!);
     } else {
       final goal = widget.goal!;
       categoryController.text = goal.category;
@@ -174,16 +175,10 @@ class _GoalEditingScreenState extends State<GoalEditingScreen> {
       );
       if (isEditing) {
         provider.editGoal(goal, widget.goal!);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomeScreen(
-                      defaultIndex: 1,
-                    )));
       } else {
         provider.addGoal(goal);
-        Navigator.pop(context);
       }
+      Navigator.pop(context);
     }
   }
 }

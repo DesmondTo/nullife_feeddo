@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
-class GoalWidget extends StatelessWidget {
+class GoalWidget extends StatefulWidget {
   final Goal goal;
   final List<String> existingCategory;
 
@@ -18,16 +18,21 @@ class GoalWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _GoalWidgetState createState() => _GoalWidgetState();
+}
+
+class _GoalWidgetState extends State<GoalWidget> {
+  @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: Slidable(
         actionPane: SlidableDrawerActionPane(),
-        key: Key(goal.id),
+        key: Key(widget.goal.id),
         actions: [
           IconSlideAction(
             color: Colors.green,
-            onTap: () => editGoal(context, goal),
+            onTap: () => editGoal(context, widget.goal),
             caption: 'Edit',
             icon: Icons.edit,
           )
@@ -36,7 +41,7 @@ class GoalWidget extends StatelessWidget {
           IconSlideAction(
             color: Colors.red,
             caption: 'Delete',
-            onTap: () => deleteGoal(context, goal),
+            onTap: () => deleteGoal(context, widget.goal),
             icon: Icons.delete,
           )
         ],
@@ -64,26 +69,39 @@ class GoalWidget extends StatelessWidget {
   }
 
   Widget buildGoal(BuildContext context) => GestureDetector(
-        onTap: () => editGoal(context, goal),
+        onTap: () => editGoal(context, widget.goal),
         child: Container(
           padding: EdgeInsets.all(20),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                goal.category,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black, //Color(0xff5C6947),
-                  fontSize: 22,
+              Expanded(
+                child: Container(
+                  height: 24,
+                  child: SingleChildScrollView(
+                    child: Text(
+                      widget.goal.category,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, //Color(0xff5C6947),
+                        fontSize: 22,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              Text(
-                '${goal.hour} hr${goal.hour > 1 ? 's' : ''} ${goal.minute} min${goal.minute > 1 ? 's' : ''}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black, //Color(0xff5C6947),
-                  fontSize: 22,
+              Expanded(
+                child: SizedBox(
+                  height: 20,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  '${widget.goal.hour} hr${widget.goal.hour > 1 ? 's' : ''} ${widget.goal.minute} min${widget.goal.minute > 1 ? 's' : ''}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black, //Color(0xff5C6947),
+                    fontSize: 22,
+                  ),
                 ),
               ),
             ],
@@ -94,8 +112,14 @@ class GoalWidget extends StatelessWidget {
   void deleteGoal(BuildContext context, Goal goal) {
     final provider = Provider.of<GoalProvider>(context, listen: false);
     provider.removeGoal(goal);
+    Utils.showSnackBar(context, 'Deleted!');
 
-    Utils.showSnackBar(context, 'Deleted the task');
+    // Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (BuildContext context) => HomeScreen(
+    //               defaultIndex: 1,
+    //             )));
   }
 
   void editGoal(BuildContext context, Goal goal) {
@@ -104,7 +128,8 @@ class GoalWidget extends StatelessWidget {
     final originalList = user!.categoryFieldList.map((categoryString) {
       return categoryString.substring(0, categoryString.indexOf(":")).trim();
     }).toList();
-    originalList.removeWhere((category) => existingCategory.contains(category));
+    originalList
+        .removeWhere((category) => widget.existingCategory.contains(category));
 
     Navigator.of(context).push(
       MaterialPageRoute(

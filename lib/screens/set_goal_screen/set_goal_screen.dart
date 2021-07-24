@@ -20,11 +20,6 @@ class _SetGoalScreenState extends State<SetGoalScreen> {
   User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final provider = Provider.of<UserProfileProvider>(context, listen: false);
     final user = provider.getCurrentUser();
@@ -51,7 +46,6 @@ class _SetGoalScreenState extends State<SetGoalScreen> {
                     _goals.map((goal) => goal.category).toList();
 
                 provider.setGoals(goals!);
-
                 return Scaffold(
                   floatingActionButton: FloatingActionButton(
                     backgroundColor: Colors.blueAccent,
@@ -79,37 +73,35 @@ class _SetGoalScreenState extends State<SetGoalScreen> {
                       );
                     },
                   ),
-                  body: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(0.0),
-                          child: GoalChart(goals: goals),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.55,
-                          child: _goals.isEmpty
-                              ? Center(
-                                  child: Text(
-                                    'No goals added',
-                                  ),
-                                )
-                              : ListView.separated(
-                                  physics: BouncingScrollPhysics(),
-                                  padding: EdgeInsets.all(16),
-                                  separatorBuilder: (context, index) =>
-                                      Container(height: 8),
-                                  itemCount: _goals.length,
-                                  itemBuilder: (context, index) {
-                                    return GoalWidget(
-                                      goal: _goals[index],
-                                      existingCategory: existingCategory,
-                                    );
-                                  },
+                  body: Column(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: GoalChart(goals: goals),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: _goals.isEmpty
+                            ? Center(
+                                child: Text(
+                                  'No goals added',
                                 ),
-                        )
-                      ],
-                    ),
+                              )
+                            : ListView.separated(
+                                physics: BouncingScrollPhysics(),
+                                padding: EdgeInsets.all(16),
+                                separatorBuilder: (context, index) =>
+                                    Container(height: 8),
+                                itemCount: _goals.length,
+                                itemBuilder: (context, index) {
+                                  return GoalWidget(
+                                    goal: _goals[index],
+                                    existingCategory: existingCategory,
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
                   ),
                 );
               }
