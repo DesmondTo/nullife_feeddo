@@ -43,11 +43,12 @@ class DatePicker extends StatelessWidget {
             trailing: Icon(Icons.keyboard_arrow_down),
             onTap: () async {
               final date = await showDatePicker(
-                context: context,
-                firstDate: DateTime(DateTime.now().year - 80),
-                lastDate: DateTime(DateTime.now().year + 1),
-                initialDate: dateOfBirth,
-              );
+                  context: context,
+                  firstDate: DateTime(DateTime.now().year - 80),
+                  lastDate: DateTime(DateTime.now().year + 1),
+                  initialDate: dateOfBirth,
+                  errorInvalidText:
+                      'Only available for user above 1 year old/ below 80 years old');
 
               if (date != null) {
                 provider.dateOfBirth = date;

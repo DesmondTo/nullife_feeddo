@@ -113,23 +113,23 @@ class ActionButton extends StatelessWidget {
 
     if (isValid) {
       formKey.currentState!.save();
-      final isSuccess = await emailProvider.login();
+      final isSuccess = await emailProvider.login(pageContext);
 
       if (isSuccess) {
         emailProvider.isLogin
             ? Navigator.pop(context)
             : Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => EmailVerifyScreen()));
-      } else {
-        final message =
-            'Please check your credentials or create a new account if you haven\'t!';
+        // } else {
+        //   final message =
+        //       'Please check your credentials or create a new account if you haven\'t!';
 
-        ScaffoldMessenger.of(pageContext).showSnackBar(
-          SnackBar(
-            content: Text(message),
-            backgroundColor: Theme.of(pageContext).errorColor,
-          ),
-        );
+        //   ScaffoldMessenger.of(pageContext).showSnackBar(
+        //     SnackBar(
+        //       content: Text(message),
+        //       backgroundColor: Theme.of(pageContext).errorColor,
+        //     ),
+        //   );
       }
     }
   }

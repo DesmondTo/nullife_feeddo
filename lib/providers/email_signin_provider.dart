@@ -98,7 +98,7 @@ class EmailSignInProvider extends ChangeNotifier {
   // Handle the login logic when the user:
   // If the user is logging in, then sign in with the email and password inputted.
   // Else, create user account with the email and password inputted.
-  Future<bool> login() async {
+  Future<bool> login(BuildContext context) async {
     try {
       isLoading = true;
 
@@ -118,7 +118,15 @@ class EmailSignInProvider extends ChangeNotifier {
       return true;
     } catch (err) {
       // Failed to sign in/up.
-      print(err);
+      String errMessage = err.toString();
+      int idx = errMessage.indexOf("]");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errMessage.substring(idx + 1).trim()),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
       isLoading = false;
       return false;
     }
