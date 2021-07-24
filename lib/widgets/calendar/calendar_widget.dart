@@ -116,7 +116,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                             textStyle: GoogleFonts.roboto(
                               fontWeight: FontWeight.bold,
                               fontSize:
-                                  MediaQuery.of(context).size.height * 0.05,
+                                  MediaQuery.of(context).size.height * 0.03,
                               color: currentHour >= 6 && currentHour < 12
                                   ? Colors.black
                                   : Colors.white,
