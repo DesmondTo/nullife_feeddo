@@ -4,6 +4,7 @@ import 'package:nullife_feeddo/models/goal_model.dart';
 import 'package:nullife_feeddo/models/todo_weekly_data.dart';
 import 'package:nullife_feeddo/providers/todo_provider.dart';
 import 'package:nullife_feeddo/utils.dart';
+import 'package:nullife_feeddo/widgets/dashboard/pet_quote_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -61,42 +62,166 @@ class _DashBoardChartState extends State<DashBoardChart> {
 
   @override
   Widget build(BuildContext context) {
-    return SfCircularChart(
-      title: ChartTitle(
-        text: buildTitle(),
-        textStyle: GoogleFonts.boogaloo(
-          color: Color(0xFF7EA3D4),
-          fontSize: 18,
-        ),
-        alignment: ChartAlignment.center,
-      ),
-      legend: Legend(
-        isVisible: true,
-        overflowMode: LegendItemOverflowMode.scroll,
-      ),
-      tooltipBehavior: _tooltipBehavior,
-      series: <CircularSeries>[
-        DoughnutSeries<TodoWeeklyData, String>(
-          dataSource: _chartData,
-          xValueMapper: (TodoWeeklyData data, _) => data.category,
-          yValueMapper: (TodoWeeklyData data, _) =>
-              double.parse(data.duration.toStringAsFixed(2)),
-          dataLabelSettings: DataLabelSettings(
-            isVisible: true,
-          ),
-          enableTooltip: true,
+    _chartData.removeWhere((data) => data.duration == 0);
+    return Column(
+      children: [
+        Stack(
+          children: [
+            ClipPath(
+              child: Container(
+                height: MediaQuery.of(context).size.height / 1.7,
+                color: Color.fromRGBO(210, 232, 255, 1),
+              ),
+              clipper: MyCustomClipper(),
+            ),
+            Column(
+              children: [
+                FittedBox(
+                  fit: BoxFit.contain,
+                  child: Padding(
+                    padding: EdgeInsets.all(2),
+                    child: Text(
+                      "WEEKLY DASHBOARD",
+                      style: GoogleFonts.boogaloo(
+                          fontSize: 28,
+                          color: Color.fromRGBO(126, 163, 212, 1)),
+                    ),
+                  ),
+                ),
+                buildDate(),
+                buildBalanceLevel(),
+                Stack(
+                  children: [
+                    Center(
+                      child: Container(
+                        padding: EdgeInsets.only(top: 30),
+                        width: MediaQuery.of(context).size.width / 1.05,
+                        height: MediaQuery.of(context).size.height / 2.7,
+                        child: SfCircularChart(
+                          borderColor: Colors.white,
+                          borderWidth: 4,
+                          backgroundColor: Color.fromRGBO(179, 203, 236, 1),
+                          title: ChartTitle(
+                            textStyle: GoogleFonts.boogaloo(
+                              color: Color(0xFF7EA3D4),
+                              fontSize: 15,
+                            ),
+                            alignment: ChartAlignment.center,
+                          ),
+                          legend: Legend(
+                            isVisible: true,
+                          ),
+                          tooltipBehavior: _tooltipBehavior,
+                          series: <CircularSeries>[
+                            DoughnutSeries<TodoWeeklyData, String>(
+                              dataSource: _chartData,
+                              xValueMapper: (TodoWeeklyData data, _) =>
+                                  data.category,
+                              yValueMapper: (TodoWeeklyData data, _) =>
+                                  double.parse(
+                                      data.duration.toStringAsFixed(2)),
+                              dataLabelSettings: DataLabelSettings(
+                                isVisible: true,
+                              ),
+                              enableTooltip: true,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                PetQuoteWidget(
+                  balanceLevel: _balanceLevel,
+                  context: context,
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );
   }
 
-  String buildTitle() {
+  Widget buildDate() {
     DateTime now = DateTime.now();
     DateTime startDate = now.subtract(Duration(days: now.weekday - 1));
     DateTime endDate = now.add(Duration(days: 7 - now.weekday));
-    return 'Weekly Dashboard\n' +
-        'MON ---- SUN\n${startDate.day} ${Utils.toMonthString(startDate.month)}' +
-        ' ---- ${endDate.day} ${Utils.toMonthString(endDate.month)}\n' +
-        'Balance level: ${_balanceLevel.toStringAsFixed(2)}%';
+    return Column(
+      children: [
+        FittedBox(
+          fit: BoxFit.contain,
+          child: Padding(
+            padding: EdgeInsets.only(top: 3),
+            child: Text(
+              "MON ---- SUN",
+              style: GoogleFonts.boogaloo(
+                  fontSize: 18, color: Color.fromRGBO(126, 163, 212, 1)),
+            ),
+          ),
+        ),
+        FittedBox(
+          fit: BoxFit.contain,
+          child: Padding(
+            padding: EdgeInsets.all(0),
+            child: Text(
+              '${startDate.day} ${Utils.toMonthString(startDate.month)}' +
+                  ' ---- ${endDate.day} ${Utils.toMonthString(endDate.month)}',
+              style: GoogleFonts.boogaloo(
+                  fontSize: 13, color: Color.fromRGBO(126, 163, 212, 1)),
+            ),
+          ),
+        ),
+      ],
+    );
   }
+
+  Widget buildBalanceLevel() {
+    return Container(
+      width: 200,
+      height: 50,
+      padding: EdgeInsets.only(top: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          border: Border.all(
+            color: Color.fromRGBO(179, 203, 236, 1),
+            width: 3.0,
+          ),
+        ),
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              'BALANCE LEVEL: ${_balanceLevel.toStringAsFixed(2)}%',
+              style: GoogleFonts.boogaloo(
+                  fontSize: 13, color: Color.fromRGBO(126, 163, 212, 1)),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MyCustomClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+
+    path.lineTo(0, size.height - 30);
+    path.lineTo(size.height, size.height);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, 0);
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }

@@ -24,6 +24,7 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
   @override
   void initState() {
     user = auth.currentUser;
+
     user!.sendEmailVerification();
     const oneSec = const Duration(seconds: 1);
 

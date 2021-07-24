@@ -6,7 +6,6 @@ import 'package:nullife_feeddo/models/user_profile.dart';
 import 'package:nullife_feeddo/providers/goal_provider.dart';
 import 'package:nullife_feeddo/providers/userProfile_provider.dart';
 import 'package:nullife_feeddo/widgets/dashboard/dashboard_chart_widget.dart';
-import 'package:nullife_feeddo/widgets/dashboard/pet_quote_widget.dart';
 import 'package:provider/provider.dart';
 
 class DashboardWidget extends StatefulWidget {
@@ -31,6 +30,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: StreamBuilder<List<Goal>>(
           stream: GoalFirebaseApi.readGoals(currentUser!.uid),
           builder: (context, snapshot) {
@@ -49,17 +49,9 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   final provider = Provider.of<GoalProvider>(context);
                   provider.setGoals(_goals!);
 
-                  return Column(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: DashBoardChart(
-                          categoryList: categoryList,
-                          goals: _goals,
-                        ),
-                      ),
-                      PetQuoteWidget(),
-                    ],
+                  return DashBoardChart(
+                    categoryList: categoryList,
+                    goals: _goals,
                   );
                 }
             }

@@ -38,6 +38,9 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
   bool isChanging = true;
   UploadTask? task;
   File? file;
+  late Timer _timer;
+  int _countDown = 300;
+  bool showCountDown = false;
 
   @override
   void initState() {
@@ -55,6 +58,7 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
     userNameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    _timer.cancel();
 
     super.dispose();
   }
@@ -194,6 +198,8 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
                                       0.075),
                             ),
                           ),
+                          if (showCountDown)
+                            Text('Verify in $_countDown seconds.'),
                         ],
                       ),
                     ),
@@ -276,6 +282,7 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
             emailController.text.toLowerCase())) {
       setState(() {
         isChanging = false;
+        showCountDown = true;
       });
       return;
     }
@@ -308,13 +315,40 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
             emailController.text.toLowerCase(),
           );
 
-          await FirebaseAuth.instance
-              .signInWithCredential(EmailAuthProvider.credential(
-            email: emailController.text.toLowerCase(),
-            password: passwordController.text,
-          ));
-          provider.editUser(userProfile, originalProfile);
-          Navigator.pop(context);
+          FirebaseAuth.instance.currentUser!.sendEmailVerification();
+
+          _timer = new Timer.periodic(
+            Duration(seconds: 1),
+            (Timer timer) async {
+              if (_countDown == 0) {
+                setState(() {
+                  _timer.cancel();
+                });
+                if (!FirebaseAuth.instance.currentUser!.emailVerified) {
+                  await FirebaseAuth.instance.currentUser!.updateEmail(
+                    originalProfile.email.toLowerCase(),
+                  );
+                }
+              } else {
+                setState(() {
+                  _countDown--;
+                });
+                User user = FirebaseAuth.instance.currentUser!;
+                await user.reload();
+                if (user.emailVerified) {
+                  _timer.cancel();
+                  await FirebaseAuth.instance
+                      .signInWithCredential(EmailAuthProvider.credential(
+                    email: emailController.text.toLowerCase(),
+                    password: passwordController.text,
+                  ));
+                  provider.editUser(userProfile, originalProfile);
+                  print('changed successfully!!!');
+                  Navigator.pop(context);
+                }
+              }
+            },
+          );
         } on FirebaseAuthException catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

@@ -1,5 +1,3 @@
-// import 'package:flutter/material.dart';
-
 enum Behaviour {
   Balance,
   Meh,
@@ -18,31 +16,31 @@ class Pet {
       required this.petImagesName,
       required this.behaviour});
 
-  static Pet createPetbyID(int id) {
-    return id == 0
-        ? Pet(
-            id: 0,
-            petName: 'Woody',
-            petImagesName: <String>[
-              "assets/images/select_pet_screen_woody_display.png",
-            ],
-            behaviour: Behaviour.Balance)
-        : id == 1
-            ? Pet(
-                id: 1,
-                petName: 'Splashy',
-                petImagesName: <String>[
-                  "assets/images/select_pet_screen_splashy_display.png",
-                ],
-                behaviour: Behaviour.Balance)
-            : Pet(
-                id: 2,
-                petName: 'Sol',
-                petImagesName: <String>[
-                  "assets/images/select_pet_screen_sol_display.png",
-                ],
-                behaviour: Behaviour.Balance);
-  }
+  // static Pet createPetbyID(int id) {
+  //   return id == 0
+  //       ? Pet(
+  //           id: 0,
+  //           petName: 'Woody',
+  //           petImagesName: <String>[
+  //             "assets/images/select_pet_screen_woody_display.png",
+  //           ],
+  //           behaviour: Behaviour.Balance)
+  //       : id == 1
+  //           ? Pet(
+  //               id: 1,
+  //               petName: 'Splashy',
+  //               petImagesName: <String>[
+  //                 "assets/images/select_pet_screen_splashy_display.png",
+  //               ],
+  //               behaviour: Behaviour.Balance)
+  //           : Pet(
+  //               id: 2,
+  //               petName: 'Sol',
+  //               petImagesName: <String>[
+  //                 "assets/images/select_pet_screen_sol_display.png",
+  //               ],
+  //               behaviour: Behaviour.Balance);
+  // }
 
   static List<Pet> generatePetList() {
     return [
@@ -50,21 +48,21 @@ class Pet {
           id: 0,
           petName: 'Woody',
           petImagesName: <String>[
-            "assets/images/select_pet_screen_woody_display.png",
+            "assets/pet/plant_happy_full.gif",
           ],
           behaviour: Behaviour.Balance),
       Pet(
           id: 1,
           petName: 'Splashy',
           petImagesName: <String>[
-            "assets/images/select_pet_screen_splashy_display.png",
+            "assets/pet/water_happy_full.gif",
           ],
           behaviour: Behaviour.Balance),
       Pet(
           id: 2,
           petName: 'Sol',
           petImagesName: <String>[
-            "assets/images/select_pet_screen_sol_display.png",
+            "assets/pet/sun_happy_full.gif",
           ],
           behaviour: Behaviour.Balance),
     ];
