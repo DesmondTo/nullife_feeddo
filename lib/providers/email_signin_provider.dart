@@ -133,7 +133,8 @@ class EmailSignInProvider extends ChangeNotifier {
   }
 
   // Sign out the user from firebase email authentication service.
-  void logout() async {
+  void logout(BuildContext context) async {
     FirebaseAuth.instance.signOut();
+    Navigator.pop(context);
   }
 }

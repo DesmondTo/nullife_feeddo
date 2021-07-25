@@ -10,7 +10,9 @@ import 'package:nullife_feeddo/widgets/goal/goal_widget.dart';
 import 'package:provider/provider.dart';
 
 class SetGoalScreen extends StatefulWidget {
-  const SetGoalScreen({Key? key}) : super(key: key);
+  const SetGoalScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SetGoalScreenState createState() => _SetGoalScreenState();
@@ -67,14 +69,26 @@ class _SetGoalScreenState extends State<SetGoalScreen> {
                       originalList.removeWhere(
                           (category) => existingCategory.contains(category));
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GoalEditingScreen(
-                            categoryList: originalList,
-                          ),
-                        ),
-                      );
+                      Future<void>(() => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GoalEditingScreen(
+                                categoryList: originalList,
+                                getter: () {
+                                  final originalList = user.categoryFieldList
+                                      .map((categoryString) {
+                                    return categoryString
+                                        .substring(
+                                            0, categoryString.indexOf(":"))
+                                        .trim();
+                                  }).toList();
+                                  originalList.removeWhere((category) =>
+                                      existingCategory.contains(category));
+                                  return originalList;
+                                },
+                              ),
+                            ),
+                          ));
                     },
                   ),
                   body: Column(
@@ -101,9 +115,7 @@ class _SetGoalScreenState extends State<SetGoalScreen> {
                                   return GoalWidget(
                                     goal: goals[index],
                                     existingCategory: existingCategory,
-                                    onChanged: () {
-                                      setState(() {});
-                                    },
+                                    onChanged: () => setState(() {}),
                                   );
                                 },
                               ),

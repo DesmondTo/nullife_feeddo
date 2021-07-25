@@ -1,20 +1,25 @@
+import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nullife_feeddo/models/goal_model.dart';
 import 'package:nullife_feeddo/providers/goal_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nullife_feeddo/providers/userProfile_provider.dart';
+import 'package:nullife_feeddo/screens/home_screen.dart';
+import 'package:nullife_feeddo/widgets/category_widget/edit_category_widget.dart';
 import 'package:nullife_feeddo/widgets/goal/time_textForm_widget.dart';
-import 'package:nullife_feeddo/widgets/login/login_widget.dart';
 import 'package:provider/provider.dart';
 
 class GoalEditingScreen extends StatefulWidget {
   final List<String>? categoryList;
   final Goal? goal;
+  final ValueGetter<List<String>>? getter;
 
   const GoalEditingScreen({
     Key? key,
     this.categoryList,
     this.goal,
+    this.getter,
   }) : super(key: key);
 
   @override
@@ -54,6 +59,7 @@ class _GoalEditingScreenState extends State<GoalEditingScreen> {
         widget.categoryList!.add(dropDownValue!);
         dropDownList = widget.categoryList!;
       }
+      allAdded = false;
     }
   }
 
@@ -143,7 +149,21 @@ class _GoalEditingScreenState extends State<GoalEditingScreen> {
   }
 
   ElevatedButton buildAddCategoryButton() => ElevatedButton.icon(
-        onPressed: () => Navigator.pop(context),
+        onPressed: () {
+          final provider =
+              Provider.of<UserProfileProvider>(context, listen: false);
+          final user = provider.getCurrentUser();
+          showDialog(
+            context: context,
+            builder: (context) {
+              return EditCategoryDialog(userProfile: user!, index: null);
+            },
+          ).then((value) => setState(() {
+                dropDownList = widget.getter!.call();
+                dropDownValue = dropDownList.first;
+                allAdded = false;
+              }));
+        },
         style: ElevatedButton.styleFrom(
           primary: Colors.white,
           shape: RoundedRectangleBorder(
@@ -284,8 +304,13 @@ class _GoalEditingScreenState extends State<GoalEditingScreen> {
       } else {
         provider.addGoal(goal);
       }
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LogInWidget()));
+      Future<void>(() => Navigator.pop(context))
+          .then((value) => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomeScreen(
+                        defaultIndex: 1,
+                      ))));
     }
   }
 }
