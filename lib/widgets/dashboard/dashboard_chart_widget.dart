@@ -48,12 +48,12 @@ class _DashBoardChartState extends State<DashBoardChart> {
       return prev +
           (match == null
               ? 0
-              : ((match.hour + match.minute / 60) <= data.duration &&
-                      ((data.duration - (match.hour + match.minute / 60)) /
-                              data.duration) <
-                          0.1
+              : ((data.duration - (match.hour + match.minute / 60)) /
+                              data.duration)
+                          .abs() <
+                      0.35
                   ? 1
-                  : 0));
+                  : 0);
     });
     _balanceLevel = _numOfHittedTarget * 100 / _goals.length;
 
