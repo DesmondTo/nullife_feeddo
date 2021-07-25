@@ -116,12 +116,13 @@ class GoogleSignInProvider extends ChangeNotifier {
     }
   }
 
-  void logout() async {
+  void logout(BuildContext context) async {
     // Using the google sign in (class field) above, we declare to disconnect
     // from google signin service
     await googleSignIn.disconnect();
     // Since we connect to google through firebase, we also want to stop
     // the firebase when we no longer use its service
     FirebaseAuth.instance.signOut();
+    Navigator.pop(context);
   }
 }

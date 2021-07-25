@@ -245,11 +245,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               'google.com') {
             final googleProvider =
                 Provider.of<GoogleSignInProvider>(context, listen: false);
-            googleProvider.logout();
+            googleProvider.logout(context);
           } else {
             final emailProvider =
                 Provider.of<EmailSignInProvider>(context, listen: false);
-            emailProvider.logout();
+            emailProvider.logout(context);
           }
         },
         shape: RoundedRectangleBorder(
