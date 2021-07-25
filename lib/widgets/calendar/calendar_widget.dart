@@ -44,7 +44,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               } else {
                 final List<Todo>? todos = snapshot.data;
 
-                final provider = Provider.of<TodoProvider>(context);
+                final provider =
+                    Provider.of<TodoProvider>(context, listen: false);
                 provider.setTodos(todos!);
                 return Stack(
                   alignment: Alignment.topCenter,
@@ -109,7 +110,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                           showCurrentTimeIndicator: true,
                           showDatePickerButton: true,
                           backgroundColor: Colors.transparent,
-                          dataSource: TodoDataSource(todos),
+                          dataSource: TodoDataSource(provider.todos),
                           todayTextStyle: GoogleFonts.boogaloo(),
                           headerStyle: CalendarHeaderStyle(
                             backgroundColor: Colors.transparent,
