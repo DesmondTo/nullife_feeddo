@@ -81,38 +81,39 @@ class _PetQuoteWidgetState extends State<PetQuoteWidget> {
                           ),
             Expanded(
               child: Padding(
-                  padding: const EdgeInsets.only(left: 0, right: 30),
-                  child: Container(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: DefaultTextStyle(
-                            style: GoogleFonts.boogaloo(
-                              fontSize: 20,
-                              color: _petID == 0
-                                  ? Color.fromRGBO(74, 97, 87, 1)
-                                  : _petID == 1
-                                      ? Color.fromRGBO(20, 60, 113, 1)
-                                      : Color.fromRGBO(195, 92, 39, 1),
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.end,
-                            child: AnimatedTextKit(
-                              animatedTexts: [
-                                TypewriterAnimatedText(
-                                  displayQuote(),
-                                  speed: const Duration(milliseconds: 200),
-                                ),
-                              ],
-                              repeatForever: true,
-                            ),
+                padding: const EdgeInsets.only(left: 0, right: 30),
+                child: Container(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: DefaultTextStyle(
+                          style: GoogleFonts.boogaloo(
+                            fontSize: 20,
+                            color: _petID == 0
+                                ? Color.fromRGBO(74, 97, 87, 1)
+                                : _petID == 1
+                                    ? Color.fromRGBO(20, 60, 113, 1)
+                                    : Color.fromRGBO(195, 92, 39, 1),
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.end,
+                          child: AnimatedTextKit(
+                            animatedTexts: [
+                              TypewriterAnimatedText(
+                                displayQuote(),
+                                speed: const Duration(milliseconds: 200),
+                              ),
+                            ],
+                            repeatForever: true,
                           ),
                         ),
-                      ],
-                    ),
-                  )),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               flex: 1,
             ),
           ],

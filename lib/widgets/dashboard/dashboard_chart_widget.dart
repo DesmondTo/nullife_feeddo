@@ -64,77 +64,68 @@ class _DashBoardChartState extends State<DashBoardChart> {
   @override
   Widget build(BuildContext context) {
     _chartData.removeWhere((data) => data.duration == 0);
-    return Column(
+    return Stack(
+      alignment: Alignment.topCenter,
       children: [
-        Stack(
+        ClipPath(
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.6,
+            color: Color.fromRGBO(210, 232, 255, 1),
+          ),
+          clipper: MyCustomClipper(),
+        ),
+        Column(
           children: [
-            ClipPath(
-              child: Container(
-                height: MediaQuery.of(context).size.height / 1.7,
-                color: Color.fromRGBO(210, 232, 255, 1),
-              ),
-              clipper: MyCustomClipper(),
-            ),
-            Column(
-              children: [
-                FittedBox(
-                  fit: BoxFit.contain,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 2, bottom: 0),
-                    child: Text(
-                      "WEEKLY DASHBOARD",
-                      style: GoogleFonts.boogaloo(
-                          fontSize: 28,
-                          color: Color.fromRGBO(126, 163, 212, 1)),
+            Expanded(
+              flex: 3,
+              child: Column(
+                children: [
+                  Text(
+                    "WEEKLY DASHBOARD",
+                    style: GoogleFonts.boogaloo(
+                      fontSize: 28,
+                      color: Color.fromRGBO(126, 163, 212, 1),
                     ),
                   ),
+                  buildDate(),
+                  buildBalanceLevel(),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 4,
+              child: SfCircularChart(
+                borderColor: Colors.white,
+                borderWidth: 4,
+                backgroundColor: Color.fromRGBO(179, 203, 236, 1),
+                legend: Legend(
+                  isVisible: true,
                 ),
-                buildDate(),
-                buildBalanceLevel(),
-                Stack(
-                  children: [
-                    Center(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 30),
-                        width: MediaQuery.of(context).size.width / 1.05,
-                        height: MediaQuery.of(context).size.height / 2.7,
-                        child: SfCircularChart(
-                          borderColor: Colors.white,
-                          borderWidth: 4,
-                          backgroundColor: Color.fromRGBO(179, 203, 236, 1),
-                          legend: Legend(
-                            isVisible: true,
-                          ),
-                          tooltipBehavior: _tooltipBehavior,
-                          series: <CircularSeries>[
-                            DoughnutSeries<TodoWeeklyData, String>(
-                              dataSource: _chartData,
-                              xValueMapper: (TodoWeeklyData data, _) =>
-                                  data.category,
-                              yValueMapper: (TodoWeeklyData data, _) =>
-                                  double.parse(
-                                      data.duration.toStringAsFixed(2)),
-                              dataLabelMapper: (TodoWeeklyData data, _) =>
-                                  data.label,
-                              dataLabelSettings: DataLabelSettings(
-                                isVisible: true,
-                              ),
-                              enableTooltip: true,
-                            ),
-                          ],
-                        ),
-                      ),
+                tooltipBehavior: _tooltipBehavior,
+                series: <CircularSeries>[
+                  DoughnutSeries<TodoWeeklyData, String>(
+                    dataSource: _chartData,
+                    xValueMapper: (TodoWeeklyData data, _) => data.category,
+                    yValueMapper: (TodoWeeklyData data, _) =>
+                        double.parse(data.duration.toStringAsFixed(2)),
+                    dataLabelMapper: (TodoWeeklyData data, _) => data.label,
+                    dataLabelSettings: DataLabelSettings(
+                      isVisible: true,
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                PetQuoteWidget(
-                  balanceLevel: _balanceLevel,
-                  context: context,
-                ),
-              ],
+                    enableTooltip: true,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(),
+            ),
+            Expanded(
+              flex: 4,
+              child: PetQuoteWidget(
+                balanceLevel: _balanceLevel,
+                context: context,
+              ),
             ),
           ],
         ),
@@ -146,105 +137,79 @@ class _DashBoardChartState extends State<DashBoardChart> {
     DateTime now = DateTime.now();
     DateTime startDate = now.subtract(Duration(days: now.weekday - 1));
     DateTime endDate = now.add(Duration(days: 7 - now.weekday));
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        FittedBox(
-          fit: BoxFit.contain,
-          child: Padding(
-            padding: EdgeInsets.only(top: 3),
-            child: Text(
-              "MON ---- SUN",
-              style: GoogleFonts.boogaloo(
-                  fontSize: 18, color: Color.fromRGBO(126, 163, 212, 1)),
-            ),
-          ),
-        ),
-        FittedBox(
-          fit: BoxFit.contain,
-          child: Padding(
-            padding: EdgeInsets.all(0),
-            child: Text(
-              '${startDate.day} ${Utils.toMonthString(startDate.month)}' +
-                  ' ---- ${endDate.day} ${Utils.toMonthString(endDate.month)}',
-              style: GoogleFonts.boogaloo(
-                  fontSize: 18, color: Color.fromRGBO(126, 163, 212, 1)),
-            ),
-          ),
-        ),
-      ],
+    return Text(
+      "MON ---- SUN\n" +
+          '${startDate.day} ${Utils.toMonthString(startDate.month)}' +
+          ' ---- ${endDate.day} ${Utils.toMonthString(endDate.month)}',
+      textAlign: TextAlign.center,
+      style: GoogleFonts.boogaloo(
+        fontSize: 22,
+        color: Color.fromRGBO(126, 163, 212, 1),
+      ),
     );
   }
 
   Widget buildBalanceLevel() {
     return Container(
-      height: 50,
-      padding: EdgeInsets.only(top: 10),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-          border: Border.all(
-            color: Color.fromRGBO(179, 203, 236, 1),
-            width: 3.0,
-          ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(12.0),
         ),
+        border: Border.all(
+          color: Color.fromRGBO(179, 203, 236, 1),
+          width: 3.0,
+        ),
+      ),
+      child: TextButton(
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FittedBox(
-              child: Padding(
-                padding: EdgeInsets.all(5),
-                child: Text(
-                  'BALANCE LEVEL: ${_balanceLevel.toStringAsFixed(2)}%',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.boogaloo(
-                    fontSize: 18,
-                    color: Color.fromRGBO(126, 163, 212, 1),
-                  ),
+            Text(
+              'BALANCE LEVEL: ${_balanceLevel.toStringAsFixed(2)}%    ',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.boogaloo(
+                fontSize: 22,
+                color: Color.fromRGBO(126, 163, 212, 1),
+              ),
+            ),
+            Icon(
+              Icons.info_rounded,
+              color: Color.fromRGBO(126, 163, 212, 1),
+            ),
+          ],
+        ),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              content: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Balance level shows how close you are to your desired work life balance (The goal you set in goal page)\n',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.boogaloo(
+                        fontSize: 18,
+                        color: Color.fromRGBO(126, 163, 212, 1),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '1. Dashboard only shows progress (completed todos\' duration) in current week.\n\n2. To increase the balance level, the duration for a category must be within a difference of 35% with that of goal of same category. (To prevent overwork/too little work)',
+                      textAlign: TextAlign.start,
+                      style: GoogleFonts.boogaloo(
+                        fontSize: 18,
+                        color: Color.fromRGBO(126, 163, 212, 1),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            TextButton(
-              child: Icon(
-                Icons.info_rounded,
-                color: Color.fromRGBO(126, 163, 212, 1),
-              ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    content: Container(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Balance level shows how close you are to your desired work life balance (The goal you set in goal page)\n',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.boogaloo(
-                              fontSize: 18,
-                              color: Color.fromRGBO(126, 163, 212, 1),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '1. Dashboard only shows progress (completed todos\' duration) in current week.\n\n2. To increase the balance level, the duration for a category must be within a difference of 35% with that of goal of same category. (To prevent overwork/too little work)',
-                            textAlign: TextAlign.start,
-                            style: GoogleFonts.boogaloo(
-                              fontSize: 18,
-                              color: Color.fromRGBO(126, 163, 212, 1),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            )
-          ],
-        ),
+          );
+        },
       ),
     );
   }

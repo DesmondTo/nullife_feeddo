@@ -2,7 +2,6 @@ import 'package:nullife_feeddo/models/todo_model.dart';
 import 'package:nullife_feeddo/models/todo_weekly_data.dart';
 import 'package:nullife_feeddo/todo_firebase_api.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:nullife_feeddo/utils.dart';
 
 class TodoProvider extends ChangeNotifier {
   List<Todo> _todos = [];
@@ -58,22 +57,10 @@ class TodoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool toggleTodoStatus(Todo todo, BuildContext context) {
-    if (DateTime.now().isAfter(todo.to)) {
-      todo.isDone = !todo.isDone;
-      TodoFirebaseApi.updateTodo(todo);
-      Utils.showSnackBar(
-        context,
-        todo.isDone ? 'Task completed' : 'Task marked incomplete',
-      );
-      return todo.isDone;
-    } else {
-      Utils.showSnackBar(
-        context,
-        'Can only be marked completed after the todo\'s deadline',
-      );
-      return false;
-    }
+  bool toggleTodoStatus(Todo todo) {
+    todo.isDone = !todo.isDone;
+    TodoFirebaseApi.updateTodo(todo);
+    return todo.isDone;
   }
 
   void editTodo(Todo newTodo, Todo oldTodo) {
