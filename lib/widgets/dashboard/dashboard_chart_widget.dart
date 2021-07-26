@@ -79,7 +79,7 @@ class _DashBoardChartState extends State<DashBoardChart> {
                 FittedBox(
                   fit: BoxFit.contain,
                   child: Padding(
-                    padding: EdgeInsets.all(2),
+                    padding: EdgeInsets.only(top: 2, bottom: 0),
                     child: Text(
                       "WEEKLY DASHBOARD",
                       style: GoogleFonts.boogaloo(
@@ -102,9 +102,10 @@ class _DashBoardChartState extends State<DashBoardChart> {
                           borderWidth: 4,
                           backgroundColor: Color.fromRGBO(179, 203, 236, 1),
                           title: ChartTitle(
+                            text: 'in Hour',
                             textStyle: GoogleFonts.boogaloo(
                               color: Color(0xFF7EA3D4),
-                              fontSize: 15,
+                              fontSize: 18,
                             ),
                             alignment: ChartAlignment.center,
                           ),
@@ -151,6 +152,7 @@ class _DashBoardChartState extends State<DashBoardChart> {
     DateTime startDate = now.subtract(Duration(days: now.weekday - 1));
     DateTime endDate = now.add(Duration(days: 7 - now.weekday));
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         FittedBox(
           fit: BoxFit.contain,
@@ -171,7 +173,7 @@ class _DashBoardChartState extends State<DashBoardChart> {
               '${startDate.day} ${Utils.toMonthString(startDate.month)}' +
                   ' ---- ${endDate.day} ${Utils.toMonthString(endDate.month)}',
               style: GoogleFonts.boogaloo(
-                  fontSize: 13, color: Color.fromRGBO(126, 163, 212, 1)),
+                  fontSize: 18, color: Color.fromRGBO(126, 163, 212, 1)),
             ),
           ),
         ),
@@ -182,7 +184,6 @@ class _DashBoardChartState extends State<DashBoardChart> {
   Widget buildBalanceLevel() {
     return Container(
       width: 200,
-      height: 50,
       padding: EdgeInsets.only(top: 10),
       child: Container(
         decoration: BoxDecoration(
@@ -194,13 +195,12 @@ class _DashBoardChartState extends State<DashBoardChart> {
           ),
         ),
         child: FittedBox(
-          fit: BoxFit.contain,
           child: Padding(
             padding: EdgeInsets.all(5),
             child: Text(
               'BALANCE LEVEL: ${_balanceLevel.toStringAsFixed(2)}%',
               style: GoogleFonts.boogaloo(
-                  fontSize: 13, color: Color.fromRGBO(126, 163, 212, 1)),
+                  fontSize: 50, color: Color.fromRGBO(126, 163, 212, 1)),
             ),
           ),
         ),

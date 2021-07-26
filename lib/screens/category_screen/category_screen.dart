@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nullife_feeddo/models/user_profile.dart';
 import 'package:nullife_feeddo/providers/userProfile_provider.dart';
@@ -5,6 +7,7 @@ import 'package:nullife_feeddo/user_firebase_api.dart';
 import 'package:nullife_feeddo/widgets/category_widget/category_button.dart';
 import 'package:nullife_feeddo/widgets/category_widget/category_header.dart';
 import 'package:flutter/material.dart';
+import 'package:nullife_feeddo/widgets/category_widget/edit_category_widget.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -34,43 +37,64 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   final List<UserProfile>? users = snapshot.data;
 
                   final provider = Provider.of<UserProfileProvider>(context);
+                  provider.setUsers(users!);
                   final user = provider.getCurrentUser();
 
-                  provider.setUsers(users!);
-
-                  List<CategoryButton> categoryButtonList =
-                      user!.categoryFieldList.asMap().entries.map((category) {
-                    int idx = category.key;
-                    String val = category.value;
-                    return CategoryButton(
-                        userProfile: user,
-                        index: idx,
-                        category: val.substring(0, val.indexOf(":")).trim(),
-                        buttonColor: Color(int.parse(
-                            val.substring(val.indexOf(":") + 1).trim())));
-                  }).toList();
-
-                  return SingleChildScrollView(
-                    child: Center(
-                      heightFactor: 1.2,
-                      child: Column(
-                        children: [
-                          CategoryHeader(),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.55,
-                            child: GridView.count(
-                              primary: false,
-                              padding: const EdgeInsets.all(20),
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              crossAxisCount: 2,
-                              children: categoryButtonList,
-                            ),
-                          ),
-                        ],
+                  if (user == null) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    List<CategoryButton> categoryButtonList =
+                        user.categoryFieldList.asMap().entries.map((category) {
+                      int idx = category.key;
+                      String val = category.value;
+                      return CategoryButton(
+                          userProfile: user,
+                          index: idx,
+                          category: val.substring(0, val.indexOf(":")).trim(),
+                          buttonColor: Color(int.parse(
+                              val.substring(val.indexOf(":") + 1).trim())));
+                    }).toList();
+                    return Scaffold(
+                      floatingActionButton: FloatingActionButton(
+                        backgroundColor: Colors.black,
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => EditCategoryDialog(
+                                userProfile: user, index: null),
+                          );
+                        },
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  );
+                      body: SingleChildScrollView(
+                        child: Center(
+                          heightFactor: 1.2,
+                          child: Column(
+                            children: [
+                              CategoryHeader(),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.55,
+                                child: GridView.count(
+                                  primary: false,
+                                  padding: const EdgeInsets.all(20),
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  crossAxisCount: 2,
+                                  children: categoryButtonList,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
                 }
             }
           }),

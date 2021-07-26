@@ -50,22 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      floatingActionButton: selectedIndex == 2
-          ? FloatingActionButton(
-              backgroundColor: Colors.black,
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) =>
-                      EditCategoryDialog(userProfile: user!, index: null),
-                );
-              },
-              child: Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-            )
-          : null,
       backgroundColor: Color(0xFFF9F1E4),
       bottomNavigationBar: buildBottomNavBar(),
       body: StreamBuilder<List<Todo>>(

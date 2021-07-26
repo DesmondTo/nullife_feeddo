@@ -70,28 +70,24 @@ class GoalWidget extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(20),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Container(
-                  height: 24,
-                  child: SingleChildScrollView(
-                    child: Text(
-                      goal.category,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black, //Color(0xff5C6947),
-                        fontSize: 22,
-                      ),
+                flex: 3,
+                child: SingleChildScrollView(
+                  child: Text(
+                    goal.category,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 22,
                     ),
                   ),
                 ),
               ),
               Expanded(
-                child: SizedBox(
-                  height: 20,
-                ),
-              ),
-              Expanded(
+                flex: 2,
                 child: Text(
                   '${goal.hour} hr${goal.hour > 1 ? 's' : ''} ${goal.minute} min${goal.minute > 1 ? 's' : ''}',
                   style: TextStyle(
