@@ -55,7 +55,8 @@ class _DashBoardChartState extends State<DashBoardChart> {
                   ? 1
                   : 0);
     });
-    _balanceLevel = _numOfHittedTarget * 100 / _goals.length;
+    _balanceLevel =
+        _goals.length == 0 ? 0 : _numOfHittedTarget * 100 / _goals.length;
 
     super.initState();
   }
@@ -101,14 +102,6 @@ class _DashBoardChartState extends State<DashBoardChart> {
                           borderColor: Colors.white,
                           borderWidth: 4,
                           backgroundColor: Color.fromRGBO(179, 203, 236, 1),
-                          title: ChartTitle(
-                            text: 'in Hour',
-                            textStyle: GoogleFonts.boogaloo(
-                              color: Color(0xFF7EA3D4),
-                              fontSize: 18,
-                            ),
-                            alignment: ChartAlignment.center,
-                          ),
                           legend: Legend(
                             isVisible: true,
                           ),
@@ -121,6 +114,8 @@ class _DashBoardChartState extends State<DashBoardChart> {
                               yValueMapper: (TodoWeeklyData data, _) =>
                                   double.parse(
                                       data.duration.toStringAsFixed(2)),
+                              dataLabelMapper: (TodoWeeklyData data, _) =>
+                                  data.label,
                               dataLabelSettings: DataLabelSettings(
                                 isVisible: true,
                               ),
@@ -183,7 +178,7 @@ class _DashBoardChartState extends State<DashBoardChart> {
 
   Widget buildBalanceLevel() {
     return Container(
-      width: 200,
+      height: 50,
       padding: EdgeInsets.only(top: 10),
       child: Container(
         decoration: BoxDecoration(
@@ -194,15 +189,61 @@ class _DashBoardChartState extends State<DashBoardChart> {
             width: 3.0,
           ),
         ),
-        child: FittedBox(
-          child: Padding(
-            padding: EdgeInsets.all(5),
-            child: Text(
-              'BALANCE LEVEL: ${_balanceLevel.toStringAsFixed(2)}%',
-              style: GoogleFonts.boogaloo(
-                  fontSize: 50, color: Color.fromRGBO(126, 163, 212, 1)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FittedBox(
+              child: Padding(
+                padding: EdgeInsets.all(5),
+                child: Text(
+                  'BALANCE LEVEL: ${_balanceLevel.toStringAsFixed(2)}%',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.boogaloo(
+                    fontSize: 18,
+                    color: Color.fromRGBO(126, 163, 212, 1),
+                  ),
+                ),
+              ),
             ),
-          ),
+            TextButton(
+              child: Icon(
+                Icons.info_rounded,
+                color: Color.fromRGBO(126, 163, 212, 1),
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    content: Container(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Balance level shows how close you are to your desired work life balance (The goal you set in goal page)\n',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.boogaloo(
+                              fontSize: 18,
+                              color: Color.fromRGBO(126, 163, 212, 1),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '1. Dashboard only shows progress (completed todos\' duration) in current week.\n\n2. To increase the balance level, the duration for a category must be within a difference of 35% with that of goal of same category. (To prevent overwork/too little work)',
+                            textAlign: TextAlign.start,
+                            style: GoogleFonts.boogaloo(
+                              fontSize: 18,
+                              color: Color.fromRGBO(126, 163, 212, 1),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+          ],
         ),
       ),
     );

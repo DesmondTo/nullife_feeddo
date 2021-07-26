@@ -1,6 +1,5 @@
 import 'package:nullife_feeddo/models/todo_model.dart';
 import 'package:nullife_feeddo/providers/todo_provider.dart';
-import 'package:nullife_feeddo/providers/userProfile_provider.dart';
 import 'package:nullife_feeddo/screens/account_screen/view_profile_screen.dart';
 import 'package:nullife_feeddo/screens/dashboard_screen/dashboard_widget.dart';
 import 'package:nullife_feeddo/screens/schedule_screen/schedule_widget.dart';
@@ -9,7 +8,6 @@ import 'package:nullife_feeddo/todo_firebase_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nullife_feeddo/widgets/category_widget/edit_category_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
@@ -38,8 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     User? currentUser = FirebaseAuth.instance.currentUser;
-    final provider = Provider.of<UserProfileProvider>(context, listen: false);
-    final user = provider.getCurrentUser();
     // Store the current user in this variable.
     final tabs = [
       DashboardWidget(),

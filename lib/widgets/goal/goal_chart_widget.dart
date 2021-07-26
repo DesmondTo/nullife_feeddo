@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nullife_feeddo/models/goal_model.dart';
+import 'package:nullife_feeddo/models/goal_weekly_data.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class GoalChart extends StatefulWidget {
@@ -17,22 +18,27 @@ class GoalChart extends StatefulWidget {
 
 class _GoalChartState extends State<GoalChart> {
   late TooltipBehavior _tooltipBehavior;
-  late List<Goal> _goals;
+  late List<GoalWeeklyData> _goals;
 
   @override
   void initState() {
     _tooltipBehavior = TooltipBehavior(enable: true);
     _goals = widget.goals
-        .map((goal) => goal.category.length > 11
-            ? Goal(
-                category: goal.category.substring(0, 10) + '...',
-                createdTime: goal.createdTime,
-                hour: goal.hour,
-                minute: goal.minute,
-                id: goal.id,
-                userId: goal.userId,
-              )
-            : goal)
+        .map(
+          (goal) => goal.category.length > 11
+              ? GoalWeeklyData(
+                  goal.category.substring(0, 10) + '...',
+                  goal.hour + goal.minute / 60,
+                  (goal.hour + goal.minute / 60).toStringAsFixed(2) +
+                      ((goal.hour + goal.minute / 60) <= 1 ? ' hr' : ' hrs'),
+                )
+              : GoalWeeklyData(
+                  goal.category,
+                  goal.hour + goal.minute / 60,
+                  (goal.hour + goal.minute / 60).toStringAsFixed(2) +
+                      ((goal.hour + goal.minute / 60) <= 1 ? ' hr' : ' hrs'),
+                ),
+        )
         .toList();
 
     super.initState();
@@ -48,14 +54,6 @@ class _GoalChartState extends State<GoalChart> {
           width: MediaQuery.of(context).size.width / 1.05,
           height: MediaQuery.of(context).size.height / 2.7,
           child: SfCircularChart(
-            title: ChartTitle(
-              text: 'in Hour',
-              textStyle: GoogleFonts.boogaloo(
-                color: Color.fromRGBO(152, 159, 122, 1),
-                fontSize: 18,
-              ),
-              alignment: ChartAlignment.center,
-            ),
             borderColor: Colors.white,
             borderWidth: 4,
             backgroundColor: Color.fromRGBO(193, 197, 175, 1),
@@ -65,11 +63,12 @@ class _GoalChartState extends State<GoalChart> {
             ),
             tooltipBehavior: _tooltipBehavior,
             series: <CircularSeries>[
-              DoughnutSeries<Goal, String>(
+              DoughnutSeries<GoalWeeklyData, String>(
                 dataSource: _goals,
-                xValueMapper: (Goal data, _) => data.category,
-                yValueMapper: (Goal data, _) => double.parse(
-                    (data.hour + data.minute / 60).toStringAsFixed(2)),
+                xValueMapper: (GoalWeeklyData data, _) => data.category,
+                yValueMapper: (GoalWeeklyData data, _) =>
+                    double.parse(data.duration.toStringAsFixed(2)),
+                dataLabelMapper: (GoalWeeklyData data, _) => data.label,
                 dataLabelSettings: DataLabelSettings(
                   isVisible: true,
                 ),

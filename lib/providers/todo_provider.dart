@@ -2,6 +2,7 @@ import 'package:nullife_feeddo/models/todo_model.dart';
 import 'package:nullife_feeddo/models/todo_weekly_data.dart';
 import 'package:nullife_feeddo/todo_firebase_api.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:nullife_feeddo/utils.dart';
 
 class TodoProvider extends ChangeNotifier {
   List<Todo> _todos = [];
@@ -57,10 +58,22 @@ class TodoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool toggleTodoStatus(Todo todo) {
-    todo.isDone = !todo.isDone;
-    TodoFirebaseApi.updateTodo(todo);
-    return todo.isDone;
+  bool toggleTodoStatus(Todo todo, BuildContext context) {
+    if (DateTime.now().isAfter(todo.to)) {
+      todo.isDone = !todo.isDone;
+      TodoFirebaseApi.updateTodo(todo);
+      Utils.showSnackBar(
+        context,
+        todo.isDone ? 'Task completed' : 'Task marked incomplete',
+      );
+      return todo.isDone;
+    } else {
+      Utils.showSnackBar(
+        context,
+        'Can only be marked completed after the todo\'s deadline',
+      );
+      return false;
+    }
   }
 
   void editTodo(Todo newTodo, Todo oldTodo) {
@@ -84,7 +97,9 @@ class TodoProvider extends ChangeNotifier {
   List<TodoWeeklyData> computeChartData(List<String> categoryList) {
     return categoryList.fold(<TodoWeeklyData>[],
         (List<TodoWeeklyData> prevList, String category) {
-      prevList.add(TodoWeeklyData(category, computeDuration(category)));
+      double duration = computeDuration(category);
+      prevList.add(TodoWeeklyData(category, duration,
+          duration.toStringAsFixed(2) + (duration <= 1 ? ' hr' : ' hrs')));
       return prevList;
     });
   }
