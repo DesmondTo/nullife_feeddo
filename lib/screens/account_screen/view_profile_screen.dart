@@ -36,9 +36,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   final List<UserProfile>? users = snapshot.data;
 
                   final provider = Provider.of<UserProfileProvider>(context);
-                  final user = provider.getCurrentUser();
-
                   provider.setUsers(users!);
+                  final user = provider.getCurrentUser();
 
                   return SafeArea(
                     child: Scaffold(

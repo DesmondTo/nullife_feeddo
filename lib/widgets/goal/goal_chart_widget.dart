@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nullife_feeddo/models/goal_model.dart';
-import 'package:nullife_feeddo/utils.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class GoalChart extends StatefulWidget {
@@ -24,9 +23,9 @@ class _GoalChartState extends State<GoalChart> {
   void initState() {
     _tooltipBehavior = TooltipBehavior(enable: true);
     _goals = widget.goals
-        .map((goal) => goal.category.length > 15
+        .map((goal) => goal.category.length > 11
             ? Goal(
-                category: goal.category.substring(0, 14),
+                category: goal.category.substring(0, 10) + '...',
                 createdTime: goal.createdTime,
                 hour: goal.hour,
                 minute: goal.minute,
@@ -49,11 +48,20 @@ class _GoalChartState extends State<GoalChart> {
           width: MediaQuery.of(context).size.width / 1.05,
           height: MediaQuery.of(context).size.height / 2.7,
           child: SfCircularChart(
+            title: ChartTitle(
+              text: 'in Hour',
+              textStyle: GoogleFonts.boogaloo(
+                color: Color.fromRGBO(152, 159, 122, 1),
+                fontSize: 18,
+              ),
+              alignment: ChartAlignment.center,
+            ),
             borderColor: Colors.white,
             borderWidth: 4,
             backgroundColor: Color.fromRGBO(193, 197, 175, 1),
             legend: Legend(
               isVisible: true,
+              overflowMode: LegendItemOverflowMode.scroll,
             ),
             tooltipBehavior: _tooltipBehavior,
             series: <CircularSeries>[
@@ -76,7 +84,6 @@ class _GoalChartState extends State<GoalChart> {
 
   Widget buildHeader() {
     return Container(
-      height: 70,
       padding: const EdgeInsets.all(5.0),
       decoration: BoxDecoration(
           color: Color.fromRGBO(152, 159, 122, 1),
@@ -88,6 +95,7 @@ class _GoalChartState extends State<GoalChart> {
         child: SingleChildScrollView(
           child: Text(
             "YOUR WEEKLY SET GOAL",
+            textAlign: TextAlign.center,
             style: GoogleFonts.boogaloo(
               color: Colors.white,
               fontSize: 30,
@@ -96,14 +104,5 @@ class _GoalChartState extends State<GoalChart> {
         ),
       ),
     );
-  }
-
-  String buildTitle() {
-    DateTime now = DateTime.now();
-    DateTime startDate = now.subtract(Duration(days: now.weekday - 1));
-    DateTime endDate = now.add(Duration(days: 7 - now.weekday));
-    return 'Your desired work-life balance for this week\n' +
-        'MON ---- SUN\n${startDate.day} ${Utils.toMonthString(startDate.month)}' +
-        ' ---- ${endDate.day} ${Utils.toMonthString(endDate.month)}\n';
   }
 }
