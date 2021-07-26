@@ -56,7 +56,9 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
     showCountDown = false;
     showChange =
         FirebaseAuth.instance.currentUser!.providerData.first.providerId !=
-            'google.com';
+                'google.com' ||
+            FirebaseAuth.instance.currentUser!.providerData.length == 2;
+    print(FirebaseAuth.instance.currentUser!.providerData.toString());
   }
 
   @override
