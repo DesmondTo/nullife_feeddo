@@ -1,5 +1,5 @@
-class TodoWeeklyData {
-  TodoWeeklyData(
+class GoalWeeklyData {
+  GoalWeeklyData(
     this.category,
     this.duration,
     this.label,

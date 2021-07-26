@@ -46,7 +46,6 @@ class _CategoryButtonState extends State<CategoryButton> {
       child: Container(
         padding: const EdgeInsets.only(top: 0),
         margin: const EdgeInsets.only(bottom: 6.0),
-        height: MediaQuery.of(context).size.height * 0.5,
         child: Column(
           children: [
             Expanded(
@@ -54,11 +53,13 @@ class _CategoryButtonState extends State<CategoryButton> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
+                    flex: 5,
                     child: SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, top: 8.0),
                         child: Text(
                           '${widget.category}',
+                          overflow: TextOverflow.clip,
                           style: GoogleFonts.boogaloo(
                             fontSize: MediaQuery.of(context).size.height * 0.03,
                             color: Colors.white,
@@ -68,6 +69,7 @@ class _CategoryButtonState extends State<CategoryButton> {
                     ),
                   ),
                   Expanded(
+                    flex: 2,
                     child: PopupMenuButton<MenuItem>(
                       icon: Icon(
                         Icons.more_horiz,
@@ -86,21 +88,34 @@ class _CategoryButtonState extends State<CategoryButton> {
               flex: 2,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 15.0),
-                child: CircularPercentIndicator(
-                  backgroundColor: Colors.transparent,
-                  progressColor: autoColored(widget.buttonColor),
-                  radius: MediaQuery.of(context).size.height * 0.1,
-                  lineWidth: 7.5,
-                  percent: completedPercentage / 100,
-                  center: Text(
-                    'Completed\n${completedPercentage.toStringAsFixed(1)}%',
-                    style: GoogleFonts.boogaloo(
-                      fontSize: MediaQuery.of(context).size.height * 0.015,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                child: completedPercentage == 0
+                    ? Center(
+                        child: Text(
+                          'No completed todo',
+                          style: GoogleFonts.boogaloo(
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.015,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    : CircularPercentIndicator(
+                        backgroundColor: Colors.transparent,
+                        progressColor: autoColored(widget.buttonColor),
+                        radius: MediaQuery.of(context).size.height * 0.1,
+                        lineWidth: 7.5,
+                        percent: completedPercentage / 100,
+                        center: Text(
+                          'Completed\n${completedPercentage.toStringAsFixed(1)}%',
+                          style: GoogleFonts.boogaloo(
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.015,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
               ),
             ),
           ],
