@@ -165,7 +165,7 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(10.0))),
                               ),
-                              onPressed: () => Navigator.push(
+                              onPressed: () => Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => SelectPetScreen(
@@ -190,7 +190,7 @@ class _ProfileEdittingScreenState extends State<ProfileEdittingScreen> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(10.0))),
                                 ),
-                                onPressed: () => Navigator.push(
+                                onPressed: () => Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>

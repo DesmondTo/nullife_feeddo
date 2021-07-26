@@ -19,9 +19,8 @@ class CategoryNameTextFormWidget extends StatelessWidget {
         ),
         textAlign: TextAlign.center,
         decoration: InputDecoration(
-          hintText: 'Change Category Name',
+          hintText: 'Add a title',
           contentPadding: EdgeInsets.only(left: 50, right: 50),
-          hintStyle: TextStyle(color: Color.fromRGBO(29, 20, 13, 1)),
           filled: true,
           fillColor: Color.fromRGBO(255, 248, 232, 1),
           enabledBorder: OutlineInputBorder(

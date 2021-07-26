@@ -55,7 +55,8 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
     );
     return AlertDialog(
       backgroundColor: Color(0xFFF5F5DC),
-      title: Text('Change category name and pick a color'),
+      title: Text(
+          '${widget.index == null ? 'Add' : 'Change'} category title and pick a color'),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,

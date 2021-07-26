@@ -203,7 +203,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                   },
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.aspect_ratio_rounded),
+                                  icon: Icon(Icons.restore),
                                   color: currentHour >= 6 && currentHour < 12
                                       ? Color.fromRGBO(16, 77, 95, 1)
                                       : currentHour >= 12 && currentHour < 17
